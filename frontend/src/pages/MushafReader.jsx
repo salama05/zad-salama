@@ -481,37 +481,38 @@ function MushafReader() {
       </header>
 
       {/* منطقة عرض الصفحة - النصوص القرآنية */}
-      <main className="flex-1 pt-20 pb-24 px-4 overflow-y-auto">
-        <div className="max-w-3xl mx-auto">
-          {/* رقم الصفحة في الأعلى */}
-          <div className={`text-center mb-6 ${textColor}`}>
-            <span className="font-cairo text-sm">۝ الصفحة {currentPage} ۝</span>
+      <main className="flex-1 pt-20 pb-24 px-6 overflow-y-auto">
+        <div className="max-w-2xl mx-auto">
+          {/* رأس الصفحة - اسم السورة والجزء */}
+          <div className={`text-center mb-8 pb-6 border-b-2 ${isDarkMode ? 'border-[#D4AF37]/30' : 'border-[#D4AF37]/40'}`}>
+            <div className={`inline-block px-8 py-3 rounded-3xl ${isDarkMode ? 'bg-[#D4AF37]/10 border border-[#D4AF37]/50' : 'bg-[#D4AF37]/5 border border-[#D4AF37]/40'} mb-2`}>
+              <span className={`font-amiri text-lg font-bold ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#8B7355]'}`}>
+                {currentSurah.name}
+              </span>
+            </div>
+            <div className={`font-cairo text-sm ${isDarkMode ? 'text-[#A0917B]' : 'text-[#A0917B]'}`}>
+              الجزء {currentJuz.toString().padStart(2, '0')}
+            </div>
           </div>
 
           {/* محتوى الصفحة */}
-          <div className={`${cardBg} rounded-2xl shadow-lg p-6 md:p-8 border ${isDarkMode ? 'border-[#3a3a3a]' : 'border-[#D4AF37]/20'}`}>
+          <div className={`rounded-xl shadow-md p-8 md:p-10 ${isDarkMode ? 'bg-[#0a0a0a] border border-[#3a3a3a]' : 'bg-[#FFFBF5] border border-[#E8D5C4]'}`}>
             {pageVerses.length === 0 ? (
               <div className={`text-center py-12 ${textColor}`}>
                 <p className="font-cairo">لا توجد آيات في هذه الصفحة</p>
               </div>
             ) : (
-              <div className="text-center leading-loose" style={{ fontSize: `${fontSize}px`, lineHeight: '2.2' }}>
+              <div className="text-center leading-relaxed" style={{ fontSize: `${fontSize}px`, lineHeight: '2.6' }}>
                 {pageVerses.map((item, index) => {
                   if (item.type === 'surah-header') {
                     return (
-                      <div key={`header-${item.surahNumber}`} className="my-8 first:mt-0">
+                      <div key={`header-${item.surahNumber}`} className="mb-8 pb-6 mt-0">
                         {/* البسملة - لجميع السور ما عدا التوبة */}
                         {item.surahNumber !== 9 && item.surahNumber !== 1 && (
-                          <p className={`font-amiri text-2xl mb-4 ${ayahTextColor}`}>
+                          <p className={`font-amiri text-xl mb-6 ${ayahTextColor}`}>
                             بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                           </p>
                         )}
-                        {/* اسم السورة */}
-                        <div className={`inline-block px-8 py-3 rounded-full ${isDarkMode ? 'bg-[#D4AF37]/20' : 'bg-[#D4AF37]/10'} mb-4`}>
-                          <span className={`font-amiri text-xl ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#8B7355]'}`}>
-                            {item.surahName}
-                          </span>
-                        </div>
                       </div>
                     );
                   }
@@ -520,8 +521,8 @@ function MushafReader() {
                   return (
                     <span key={`ayah-${item.surahNumber}-${item.numberInSurah}`} className={`font-amiri ${ayahTextColor}`}>
                       {item.text}
-                      <span className={`mx-1 ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#D4AF37]'}`}>
-                        ﴿{item.numberInSurah.toLocaleString('ar-EG')}﴾
+                      <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-[0.65em] font-bold mx-1 ${isDarkMode ? 'bg-[#D4AF37]/30 text-[#D4AF37]' : 'bg-[#D4AF37]/20 text-[#8B7355]'}`}>
+                        {item.numberInSurah.toLocaleString('ar-EG')}
                       </span>
                       {' '}
                     </span>
@@ -532,17 +533,17 @@ function MushafReader() {
           </div>
 
           {/* التحكم في حجم الخط */}
-          <div className={`flex items-center justify-center gap-4 mt-6 ${textColor}`}>
+          <div className={`flex items-center justify-center gap-4 mt-8 ${textColor}`}>
             <button
               onClick={() => setFontSize(Math.max(10, fontSize - 2))}
-              className={`w-10 h-10 rounded-full ${cardBg} shadow-md flex items-center justify-center text-xl font-bold`}
+              className={`w-10 h-10 rounded-full ${cardBg} shadow-md flex items-center justify-center text-xl font-bold hover:shadow-lg transition ${isDarkMode ? 'border border-[#D4AF37]/30' : 'border border-[#D4AF37]/20'}`}
             >
-              -
+              −
             </button>
-            <span className="font-cairo text-sm">حجم الخط: {fontSize}</span>
+            <span className="font-cairo text-xs">حجم الخط: {fontSize}</span>
             <button
               onClick={() => setFontSize(Math.min(36, fontSize + 2))}
-              className={`w-10 h-10 rounded-full ${cardBg} shadow-md flex items-center justify-center text-xl font-bold`}
+              className={`w-10 h-10 rounded-full ${cardBg} shadow-md flex items-center justify-center text-xl font-bold hover:shadow-lg transition ${isDarkMode ? 'border border-[#D4AF37]/30' : 'border border-[#D4AF37]/20'}`}
             >
               +
             </button>
@@ -567,13 +568,18 @@ function MushafReader() {
             <FaArrowRight size={24} />
           </button>
 
-          {/* الانتقال لصفحة */}
-          <button
-            onClick={() => setShowJumpModal(true)}
-            className={`px-6 py-3 ${cardBg} rounded-full shadow-md ${textColor} font-cairo font-bold hover:opacity-90 transition`}
-          >
-            صفحة {currentPage} / 604
-          </button>
+          {/* رقم الصفحة والجزء */}
+          <div className={`flex items-center justify-center gap-4 ${textColor}`}>
+            <span className="font-cairo text-sm">الصفحة</span>
+            <button
+              onClick={() => setShowJumpModal(true)}
+              className={`px-6 py-2 ${cardBg} rounded-full shadow-md ${textColor} font-cairo font-bold hover:opacity-80 transition border ${isDarkMode ? 'border-[#D4AF37]/30' : 'border-[#D4AF37]/20'}`}
+            >
+              {currentPage}
+            </button>
+            <span className="font-cairo text-sm">•</span>
+            <span className="font-cairo text-sm">الجزء {currentJuz.toString().padStart(2, '0')}</span>
+          </div>
 
           {/* الصفحة السابقة */}
           <button
