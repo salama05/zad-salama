@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+
+@import "tailwindcss";
+
+/* react-calendar custom styles */
+.calendar-container {
+  display: flex !important;
+  justify-content: center !important;
+}
+.custom-calendar {
+  width: 100% !important;
+  max-width: 500px;
+  background: white;
+  border: 1px solid rgba(212, 175, 55, 0.3) !important;
+  border-radius: 1rem;
+  font-family: inherit !important;
+  line-height: 1.5em;
+  padding: 1rem;
+}
+.custom-calendar button {
+  border-radius: 5px;
+}
+.custom-calendar .react-calendar__navigation button {
+  font-family: inherit !important;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+.custom-calendar .react-calendar__tile--now {
+  background: rgba(197, 160, 40, 0.1) !important;
+  border-radius: 50%;
+}
+.custom-calendar .react-calendar__tile--active {
+  background: #C5A028 !important;
+  color: white !important;
+  border-radius: 50%;
+}
+/* Ensure yellow tiles can override default styling */
+.custom-calendar .bg-yellow-300 {
+  background-color: #fde047 !important;
+  color: #713f12 !important;
+}
+.custom-calendar .bg-green-500 {
+  background-color: #22c55e !important;
+  color: white !important;
+}
+
+@theme {
+  --color-zad-bg: #F9F4E8;
+  --color-zad-text: #2D2D2D;
+  --color-zad-border: #D4B595;
+  --color-zad-darkBg: #1a1a2e;
+  --color-zad-darkText: #E8D5B7;
+  --color-zad-darkBorder: #8B6914;
+  --color-zad-goldBg: #FFF8DC;
+  --color-zad-goldText: #1a0a00;
+  --color-zad-goldBorder: #C5A028;
+  --color-zad-blueBg: #E8F4FD;
+  --color-zad-blueText: #1a2a3a;
+  --color-zad-blueBorder: #4A7FA5;
+
+  --font-amiri: 'Amiri', serif;
+  --font-amiri-quran: 'Amiri Quran', serif;
+  --font-cairo: 'Cairo', sans-serif;
+  --font-noto: 'Noto Naskh Arabic', serif;
+}
+
+@layer base {
+  body {
+    @apply font-cairo bg-zad-bg text-zad-text m-0 p-0 antialiased overflow-x-hidden;
+    direction: rtl; /* Right-to-Left by default for Arabic */
+  }
+
+  /* Scrollbar override for webkit */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zad-border rounded-full;
+  }
+}
+
+.font-amiri {
+  font-family: 'Amiri', serif;
+}
+
+.font-amiri-quran {
+  font-family: 'Amiri Quran', serif;
+}
+
+/* Islamic Geometric background patterns (optional usage) */
+.islamic-bg {
+  background-image: radial-gradient(circle at center, rgba(212, 181, 149, 0.1) 0%, transparent 70%);
+}
+
+.mushaf-layout {
+  text-align: justify;
+  text-justify: kashida;
+  -moz-text-align-last: center;
+  text-align-last: center;
+}
+
+/* Page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+.page-exit {
+  opacity: 1;
+}
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}

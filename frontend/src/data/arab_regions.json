@@ -1,0 +1,1718 @@
+{
+  "EG": [
+    {
+      "name": "Aswan",
+      "arName": "أسوان"
+    },
+    {
+      "name": "Asyut",
+      "arName": "أسيوط"
+    },
+    {
+      "name": "Alexandria",
+      "arName": "الإسكندرية"
+    },
+    {
+      "name": "Ismailia",
+      "arName": "الاسماعيلية"
+    },
+    {
+      "name": "Luxor",
+      "arName": "الأقصر"
+    },
+    {
+      "name": "Red Sea",
+      "arName": "البحر الأحمر"
+    },
+    {
+      "name": "Beheira",
+      "arName": "البحيرة"
+    },
+    {
+      "name": "Giza",
+      "arName": "الجيزة"
+    },
+    {
+      "name": "Dakahlia",
+      "arName": "الدقهلية"
+    },
+    {
+      "name": "Suez",
+      "arName": "السويس"
+    },
+    {
+      "name": "Sharqia",
+      "arName": "الشرقية"
+    },
+    {
+      "name": "Gharbia",
+      "arName": "الغربية"
+    },
+    {
+      "name": "Faiyum",
+      "arName": "الفيوم"
+    },
+    {
+      "name": "Cairo",
+      "arName": "القاهرة"
+    },
+    {
+      "name": "Qalyubia",
+      "arName": "القليوبية"
+    },
+    {
+      "name": "Monufia",
+      "arName": "المنوفية"
+    },
+    {
+      "name": "Minya",
+      "arName": "المنيا"
+    },
+    {
+      "name": "New Valley",
+      "arName": "الوادي الجديد"
+    },
+    {
+      "name": "Beni Suef",
+      "arName": "بني سويف"
+    },
+    {
+      "name": "Port Said",
+      "arName": "بورسعيد"
+    },
+    {
+      "name": "South Sinai",
+      "arName": "جنوب سيناء"
+    },
+    {
+      "name": "Damietta",
+      "arName": "دمياط"
+    },
+    {
+      "name": "Sohag",
+      "arName": "سوهاج"
+    },
+    {
+      "name": "North Sinai",
+      "arName": "شمال سيناء"
+    },
+    {
+      "name": "Qena",
+      "arName": "قنا"
+    },
+    {
+      "name": "Kafr El-Sheikh",
+      "arName": "كفر الشيخ"
+    },
+    {
+      "name": "Matrouh",
+      "arName": "مطروح"
+    }
+  ],
+  "SA": [
+    {
+      "name": "Al Bahah",
+      "arName": "الباحة"
+    },
+    {
+      "name": "Al Jawf",
+      "arName": "الجوف"
+    },
+    {
+      "name": "Northern Borders",
+      "arName": "الحدود الشمالية"
+    },
+    {
+      "name": "Riyadh",
+      "arName": "الرياض"
+    },
+    {
+      "name": "Eastern",
+      "arName": "الشرقية"
+    },
+    {
+      "name": "Al-Qassim",
+      "arName": "القصيم"
+    },
+    {
+      "name": "Al Madinah",
+      "arName": "المدينة المنورة"
+    },
+    {
+      "name": "Tabuk",
+      "arName": "تبوك"
+    },
+    {
+      "name": "Jizan",
+      "arName": "جازان"
+    },
+    {
+      "name": "Ha'il",
+      "arName": "حائل"
+    },
+    {
+      "name": "Asir",
+      "arName": "عسير"
+    },
+    {
+      "name": "Makkah",
+      "arName": "مكة"
+    },
+    {
+      "name": "Najran",
+      "arName": "نجران"
+    }
+  ],
+  "AE": [
+    {
+      "name": "Abu Dhabi",
+      "arName": "أبو ظبي"
+    },
+    {
+      "name": "Sharjah",
+      "arName": "الشارقة"
+    },
+    {
+      "name": "Fujairah",
+      "arName": "الفجيرة"
+    },
+    {
+      "name": "Umm Al Quwain",
+      "arName": "ام القيوين"
+    },
+    {
+      "name": "Dubai",
+      "arName": "دبي"
+    },
+    {
+      "name": "Ras Al Khaimah",
+      "arName": "رأس الخيمة"
+    },
+    {
+      "name": "Ajman",
+      "arName": "عجمان"
+    }
+  ],
+  "JO": [
+    {
+      "name": "Irbid",
+      "arName": "إربد"
+    },
+    {
+      "name": "Balqa",
+      "arName": "البلقاء"
+    },
+    {
+      "name": "Zarqa",
+      "arName": "الزرقاء"
+    },
+    {
+      "name": "Tafilah",
+      "arName": "الطفيلة"
+    },
+    {
+      "name": "Aqaba",
+      "arName": "العقبة"
+    },
+    {
+      "name": "Karak",
+      "arName": "الكرك"
+    },
+    {
+      "name": "Mafraq",
+      "arName": "المفرق"
+    },
+    {
+      "name": "Jerash",
+      "arName": "جرش"
+    },
+    {
+      "name": "Ajloun",
+      "arName": "عجلون"
+    },
+    {
+      "name": "Amman",
+      "arName": "عمان"
+    },
+    {
+      "name": "Madaba",
+      "arName": "مادبا"
+    },
+    {
+      "name": "Ma'an",
+      "arName": "معان"
+    }
+  ],
+  "KW": [
+    {
+      "name": "Al Ahmadi",
+      "arName": "الأحمدي"
+    },
+    {
+      "name": "Al Jahra",
+      "arName": "الجهراء"
+    },
+    {
+      "name": "Al Asimah",
+      "arName": "العاصمة"
+    },
+    {
+      "name": "Al Farwaniyah",
+      "arName": "الفروانية"
+    },
+    {
+      "name": "Hawalli",
+      "arName": "حولي"
+    },
+    {
+      "name": "Mubarak Al-Kabeer",
+      "arName": "مبارك الكبير"
+    }
+  ],
+  "QA": [
+    {
+      "name": "Al Khor",
+      "arName": "الخور"
+    },
+    {
+      "name": "Doha",
+      "arName": "الدوحة"
+    },
+    {
+      "name": "Al Rayyan",
+      "arName": "الريان"
+    },
+    {
+      "name": "Al-Shahaniya",
+      "arName": "الشحانية"
+    },
+    {
+      "name": "Al Daayen",
+      "arName": "الظعاين"
+    },
+    {
+      "name": "Al Wakrah",
+      "arName": "الوكرة"
+    },
+    {
+      "name": "Umm Salal",
+      "arName": "ام صلال"
+    },
+    {
+      "name": "Madinat ash Shamal",
+      "arName": "مدينة الشمال"
+    }
+  ],
+  "BH": [
+    {
+      "name": "Muharraq",
+      "arName": "المحرق"
+    },
+    {
+      "name": "Southern",
+      "arName": "جنوبي"
+    },
+    {
+      "name": "Northern",
+      "arName": "شمال كردفان"
+    },
+    {
+      "name": "Capital",
+      "arName": "عاصمة"
+    }
+  ],
+  "OM": [
+    {
+      "name": "Al Batinah South",
+      "arName": "الباطنة جنوب"
+    },
+    {
+      "name": "Al Buraimi",
+      "arName": "البريمي"
+    },
+    {
+      "name": "Ad Dakhiliyah",
+      "arName": "الداخلية"
+    },
+    {
+      "name": "Ad Dhahirah",
+      "arName": "الظاهرة"
+    },
+    {
+      "name": "Al Wusta",
+      "arName": "الوسطى"
+    },
+    {
+      "name": "Ash Sharqiyah South",
+      "arName": "جنوب الشرقية"
+    },
+    {
+      "name": "Al Batinah North",
+      "arName": "شمال الباطنة"
+    },
+    {
+      "name": "Ash Sharqiyah North",
+      "arName": "شمال الشرقية"
+    },
+    {
+      "name": "Dhofar",
+      "arName": "ظفار"
+    },
+    {
+      "name": "Muscat",
+      "arName": "مسقط"
+    },
+    {
+      "name": "Musandam",
+      "arName": "مسندم"
+    }
+  ],
+  "IQ": [
+    {
+      "name": "Erbil",
+      "arName": "اربيل"
+    },
+    {
+      "name": "Iqlim Kurdistan",
+      "arName": "اقليم كردستان"
+    },
+    {
+      "name": "Al Anbar",
+      "arName": "الانبار"
+    },
+    {
+      "name": "Basra",
+      "arName": "البصرة"
+    },
+    {
+      "name": "Sulaymaniyah",
+      "arName": "السليمانية"
+    },
+    {
+      "name": "Al-Qādisiyyah",
+      "arName": "القادسية"
+    },
+    {
+      "name": "Al Muthanna",
+      "arName": "المثنى"
+    },
+    {
+      "name": "Najaf",
+      "arName": "النجف"
+    },
+    {
+      "name": "Babylon",
+      "arName": "بابل"
+    },
+    {
+      "name": "Baghdad",
+      "arName": "بغداد"
+    },
+    {
+      "name": "Dohuk",
+      "arName": "دهوك"
+    },
+    {
+      "name": "Diyala",
+      "arName": "ديالى"
+    },
+    {
+      "name": "Dhi Qar",
+      "arName": "ذي قار"
+    },
+    {
+      "name": "Saladin",
+      "arName": "صلاح الدين"
+    },
+    {
+      "name": "Karbala",
+      "arName": "كربلاء"
+    },
+    {
+      "name": "Kirkuk",
+      "arName": "كركوك"
+    },
+    {
+      "name": "Maysan",
+      "arName": "ميسان"
+    },
+    {
+      "name": "Nineveh",
+      "arName": "نينوى"
+    },
+    {
+      "name": "Wasit",
+      "arName": "واسط"
+    }
+  ],
+  "SY": [
+    {
+      "name": "Idlib",
+      "arName": "ادلب"
+    },
+    {
+      "name": "Al-Hasakah",
+      "arName": "الحسكة"
+    },
+    {
+      "name": "Al-Raqqah",
+      "arName": "الرقة"
+    },
+    {
+      "name": "As-Suwayda",
+      "arName": "السويداء"
+    },
+    {
+      "name": "Quneitra",
+      "arName": "القنيطرة"
+    },
+    {
+      "name": "Latakia",
+      "arName": "اللاذقية"
+    },
+    {
+      "name": "Aleppo",
+      "arName": "حلب"
+    },
+    {
+      "name": "Hama",
+      "arName": "حماة"
+    },
+    {
+      "name": "Homs",
+      "arName": "حمص"
+    },
+    {
+      "name": "Daraa",
+      "arName": "درعا"
+    },
+    {
+      "name": "Damascus",
+      "arName": "دمشق"
+    },
+    {
+      "name": "Deir ez-Zor",
+      "arName": "دير الزور"
+    },
+    {
+      "name": "Rif Dimashq",
+      "arName": "ريف دمشق"
+    },
+    {
+      "name": "Tartus",
+      "arName": "طرطوس"
+    }
+  ],
+  "LB": [
+    {
+      "name": "Beqaa",
+      "arName": "البقاع"
+    },
+    {
+      "name": "Nabatieh",
+      "arName": "النبطية"
+    },
+    {
+      "name": "Baalbek-Hermel",
+      "arName": "بعلبك الهرمل"
+    },
+    {
+      "name": "Beirut",
+      "arName": "بيروت"
+    },
+    {
+      "name": "Mount Lebanon",
+      "arName": "جبل لبنان"
+    },
+    {
+      "name": "South",
+      "arName": "جنوب"
+    },
+    {
+      "name": "North",
+      "arName": "شمال"
+    },
+    {
+      "name": "Akkar",
+      "arName": "عكار"
+    }
+  ],
+  "TN": [
+    {
+      "name": "Ariana",
+      "arName": "أريانة"
+    },
+    {
+      "name": "Kasserine",
+      "arName": "القصرين"
+    },
+    {
+      "name": "Kairouan",
+      "arName": "القيروان"
+    },
+    {
+      "name": "Kef",
+      "arName": "الكاف"
+    },
+    {
+      "name": "Monastir",
+      "arName": "المنستير"
+    },
+    {
+      "name": "Mahdia",
+      "arName": "المهدية"
+    },
+    {
+      "name": "Béja",
+      "arName": "باجة"
+    },
+    {
+      "name": "Ben Arous",
+      "arName": "بن عروس"
+    },
+    {
+      "name": "Bizerte",
+      "arName": "بنزرت"
+    },
+    {
+      "name": "Tataouine",
+      "arName": "تطاوين"
+    },
+    {
+      "name": "Tozeur",
+      "arName": "توزر"
+    },
+    {
+      "name": "Tunis",
+      "arName": "تونس"
+    },
+    {
+      "name": "Jendouba",
+      "arName": "جندوبة"
+    },
+    {
+      "name": "Zaghouan",
+      "arName": "زغوان"
+    },
+    {
+      "name": "Siliana",
+      "arName": "سليانة"
+    },
+    {
+      "name": "Sousse",
+      "arName": "سوسة"
+    },
+    {
+      "name": "Sidi Bouzid",
+      "arName": "سيدي بوزيد"
+    },
+    {
+      "name": "Sfax",
+      "arName": "صفاقس"
+    },
+    {
+      "name": "Gabès",
+      "arName": "قابس"
+    },
+    {
+      "name": "Kebili",
+      "arName": "قبلي"
+    },
+    {
+      "name": "Gafsa",
+      "arName": "قفصة"
+    },
+    {
+      "name": "Medenine",
+      "arName": "مدنين"
+    },
+    {
+      "name": "Manouba",
+      "arName": "منوبة"
+    },
+    {
+      "name": "Nabeul",
+      "arName": "نابل"
+    }
+  ],
+  "DZ": [
+    {
+      "name": "Adrar",
+      "arName": "أدرار"
+    },
+    {
+      "name": "Laghouat",
+      "arName": "الأغواط"
+    },
+    {
+      "name": "Blida",
+      "arName": "البليدة"
+    },
+    {
+      "name": "Bouïra",
+      "arName": "البويرة"
+    },
+    {
+      "name": "El Bayadh",
+      "arName": "البياض"
+    },
+    {
+      "name": "Algiers",
+      "arName": "الجزائر العاصمة"
+    },
+    {
+      "name": "Djelfa",
+      "arName": "الجلفة"
+    },
+    {
+      "name": "Chlef",
+      "arName": "الشلف"
+    },
+    {
+      "name": "El Tarf",
+      "arName": "الطارف"
+    },
+    {
+      "name": "Médéa",
+      "arName": "المدية"
+    },
+    {
+      "name": "M'Sila",
+      "arName": "المسيلة"
+    },
+    {
+      "name": "El M'ghair",
+      "arName": "المغير"
+    },
+    {
+      "name": "El Menia",
+      "arName": "المنيا"
+    },
+    {
+      "name": "El Oued",
+      "arName": "الواد"
+    },
+    {
+      "name": "Illizi",
+      "arName": "إليزي"
+    },
+    {
+      "name": "Oum El Bouaghi",
+      "arName": "ام البواقي"
+    },
+    {
+      "name": "Ouled Djellal",
+      "arName": "أولاد جلال"
+    },
+    {
+      "name": "Batna",
+      "arName": "باتنة"
+    },
+    {
+      "name": "Béjaïa",
+      "arName": "بجاية"
+    },
+    {
+      "name": "Bordj Baji Mokhtar",
+      "arName": "برج باجي مختار"
+    },
+    {
+      "name": "Bordj Bou Arréridj",
+      "arName": "برج بوعريريج"
+    },
+    {
+      "name": "Biskra",
+      "arName": "بسكرة"
+    },
+    {
+      "name": "Béchar",
+      "arName": "بشار"
+    },
+    {
+      "name": "Béni Abbès",
+      "arName": "بني عباس"
+    },
+    {
+      "name": "Boumerdès",
+      "arName": "بومرداس"
+    },
+    {
+      "name": "Tébessa",
+      "arName": "تبسة"
+    },
+    {
+      "name": "Touggourt",
+      "arName": "تقرت"
+    },
+    {
+      "name": "Tlemcen",
+      "arName": "تلمسان"
+    },
+    {
+      "name": "Tamanghasset",
+      "arName": "تمنغاست"
+    },
+    {
+      "name": "Tindouf",
+      "arName": "تندوف"
+    },
+    {
+      "name": "Tiaret",
+      "arName": "تيارت"
+    },
+    {
+      "name": "Tipasa",
+      "arName": "تيبازة"
+    },
+    {
+      "name": "Tizi Ouzou",
+      "arName": "تيزي وزو"
+    },
+    {
+      "name": "Tissemsilt",
+      "arName": "تيسمسيلت"
+    },
+    {
+      "name": "Timimoun",
+      "arName": "تيميمون"
+    },
+    {
+      "name": "Djanet",
+      "arName": "جانيت"
+    },
+    {
+      "name": "Jijel",
+      "arName": "جيجل"
+    },
+    {
+      "name": "Khenchela",
+      "arName": "خنشلة"
+    },
+    {
+      "name": "Sétif",
+      "arName": "سطيف"
+    },
+    {
+      "name": "Skikda",
+      "arName": "سكيكدة"
+    },
+    {
+      "name": "Souk Ahras",
+      "arName": "سوق أهراس"
+    },
+    {
+      "name": "Sidi Bel Abbès",
+      "arName": "سيدي بلعباس"
+    },
+    {
+      "name": "Saïda",
+      "arName": "صيدا"
+    },
+    {
+      "name": "Annaba",
+      "arName": "عنابة"
+    },
+    {
+      "name": "Aïn Defla",
+      "arName": "عين الدفلى"
+    },
+    {
+      "name": "Aïn Témouchent",
+      "arName": "عين تموشنت"
+    },
+    {
+      "name": "Ghardaïa",
+      "arName": "غرداية"
+    },
+    {
+      "name": "Relizane",
+      "arName": "غليزان"
+    },
+    {
+      "name": "In Salah",
+      "arName": "في صلاح"
+    },
+    {
+      "name": "In Guezzam",
+      "arName": "في قزام"
+    },
+    {
+      "name": "Guelma",
+      "arName": "قالمة"
+    },
+    {
+      "name": "Constantine",
+      "arName": "قسنطينة"
+    },
+    {
+      "name": "Mascara",
+      "arName": "ماسكارا"
+    },
+    {
+      "name": "Mostaganem",
+      "arName": "مستغانم"
+    },
+    {
+      "name": "Mila",
+      "arName": "ميلة"
+    },
+    {
+      "name": "Naama",
+      "arName": "نعمة"
+    },
+    {
+      "name": "Ouargla",
+      "arName": "ورقلة"
+    },
+    {
+      "name": "Oran",
+      "arName": "وهران"
+    }
+  ],
+  "MA": [
+    {
+      "name": "Assa-Zag (EH-partial)",
+      "arName": "آسا-الزاك (EH-جزئي)"
+    },
+    {
+      "name": "Safi",
+      "arName": "آسفي"
+    },
+    {
+      "name": "Azilal",
+      "arName": "أزيلال"
+    },
+    {
+      "name": "Ifrane",
+      "arName": "إفران"
+    },
+    {
+      "name": "Agadir-Ida-Ou-Tanane",
+      "arName": "أكادير إيدا وتنان"
+    },
+    {
+      "name": "El Jadida",
+      "arName": "الجديدة"
+    },
+    {
+      "name": "El Hajeb",
+      "arName": "الحاجب"
+    },
+    {
+      "name": "Al Hoceïma",
+      "arName": "الحسيمة"
+    },
+    {
+      "name": "Al Haouz",
+      "arName": "الحوز"
+    },
+    {
+      "name": "Khémisset",
+      "arName": "الخميسات"
+    },
+    {
+      "name": "Dakhla-Oued Ed-Dahab (EH)",
+      "arName": "الداخلة - وادي الذهب (EH)"
+    },
+    {
+      "name": "Casablanca",
+      "arName": "الدار البيضاء"
+    },
+    {
+      "name": "Casablanca-Settat",
+      "arName": "الدار البيضاء-سطات"
+    },
+    {
+      "name": "Driouch",
+      "arName": "الدريوش"
+    },
+    {
+      "name": "Rabat",
+      "arName": "الرباط"
+    },
+    {
+      "name": "Rabat-Salé-Kénitra",
+      "arName": "الرباط سلا القنيطرة"
+    },
+    {
+      "name": "Rehamna",
+      "arName": "الرحامنة"
+    },
+    {
+      "name": "Errachidia",
+      "arName": "الرشيدية"
+    },
+    {
+      "name": "Es-Semara (EH-partial)",
+      "arName": "السمارة (جزئي)"
+    },
+    {
+      "name": "Skhirate-Témara",
+      "arName": "الصخيرات - تمارة"
+    },
+    {
+      "name": "Essaouira",
+      "arName": "الصويرة"
+    },
+    {
+      "name": "Larache",
+      "arName": "العرائش"
+    },
+    {
+      "name": "Laâyoune (EH)",
+      "arName": "العيون (EH)"
+    },
+    {
+      "name": "Laâyoune-Sakia El Hamra (EH-partial)",
+      "arName": "العيون- الساقية الحمراء (EH-جزئي)"
+    },
+    {
+      "name": "Fahs-Anjra",
+      "arName": "الفحص أنجرا"
+    },
+    {
+      "name": "Fquih Ben Salah",
+      "arName": "الفقيه بن صلاح"
+    },
+    {
+      "name": "Kénitra",
+      "arName": "القنيطرة"
+    },
+    {
+      "name": "Mohammadia",
+      "arName": "المحمدية"
+    },
+    {
+      "name": "Nador",
+      "arName": "الناظور"
+    },
+    {
+      "name": "Nouaceur",
+      "arName": "النواصر"
+    },
+    {
+      "name": "Youssoufia",
+      "arName": "اليوسفية"
+    },
+    {
+      "name": "Inezgane-Ait Melloul",
+      "arName": "إنزكان - آيت ملول"
+    },
+    {
+      "name": "Aousserd (EH)",
+      "arName": "أوسرد (EH)"
+    },
+    {
+      "name": "Salé",
+      "arName": "أُوكَازيُون"
+    },
+    {
+      "name": "Berrechid",
+      "arName": "برشيد"
+    },
+    {
+      "name": "Berkane",
+      "arName": "بركان"
+    },
+    {
+      "name": "Benslimane",
+      "arName": "بنسليمان"
+    },
+    {
+      "name": "Béni Mellal",
+      "arName": "بني ملال"
+    },
+    {
+      "name": "Béni Mellal-Khénifra",
+      "arName": "بني ملال-خنيفرة"
+    },
+    {
+      "name": "Boujdour (EH)",
+      "arName": "بوجدور (EH)"
+    },
+    {
+      "name": "Boulemane",
+      "arName": "بولمان"
+    },
+    {
+      "name": "Tata",
+      "arName": "تاتا"
+    },
+    {
+      "name": "Taroudannt",
+      "arName": "تارودانت"
+    },
+    {
+      "name": "Taza",
+      "arName": "تازة"
+    },
+    {
+      "name": "Taourirt",
+      "arName": "تاوريرت"
+    },
+    {
+      "name": "Taounate",
+      "arName": "تاونات"
+    },
+    {
+      "name": "Tiznit",
+      "arName": "تزنيت"
+    },
+    {
+      "name": "Tétouan",
+      "arName": "تطوان"
+    },
+    {
+      "name": "Tinghir",
+      "arName": "تنغير"
+    },
+    {
+      "name": "Jerada",
+      "arName": "جرادة"
+    },
+    {
+      "name": "Guercif",
+      "arName": "جرسيف"
+    },
+    {
+      "name": "Khouribga",
+      "arName": "خريبكة"
+    },
+    {
+      "name": "Khénifra",
+      "arName": "خنيفرة"
+    },
+    {
+      "name": "Drâa-Tafilalet",
+      "arName": "درعة-تافيلالت"
+    },
+    {
+      "name": "Zagora",
+      "arName": "زاكورة"
+    },
+    {
+      "name": "Settat",
+      "arName": "سطات"
+    },
+    {
+      "name": "Souss-Massa",
+      "arName": "سوس ماسة"
+    },
+    {
+      "name": "Sidi Ifni",
+      "arName": "سيدي افني"
+    },
+    {
+      "name": "Sidi Bennour",
+      "arName": "سيدي بنور"
+    },
+    {
+      "name": "Sidi Slimane",
+      "arName": "سيدي سليمان"
+    },
+    {
+      "name": "Sidi Kacem",
+      "arName": "سيدي قاسم"
+    },
+    {
+      "name": "Chtouka-Ait Baha",
+      "arName": "شتوكة-أيت الباحة"
+    },
+    {
+      "name": "Chefchaouen",
+      "arName": "شفشاون"
+    },
+    {
+      "name": "Chichaoua",
+      "arName": "شيشاوة"
+    },
+    {
+      "name": "Sefrou",
+      "arName": "صفرو"
+    },
+    {
+      "name": "Tan-Tan (EH-partial)",
+      "arName": "طانطان (EH-جزئي)"
+    },
+    {
+      "name": "Tarfaya (EH-partial)",
+      "arName": "طرفاية (EH-جزئي)"
+    },
+    {
+      "name": "Tanger-Assilah",
+      "arName": "طنجة-أصيلة"
+    },
+    {
+      "name": "Tanger-Tétouan-Al Hoceïma",
+      "arName": "طنجة-تطوان-الحسيمة"
+    },
+    {
+      "name": "Fès",
+      "arName": "فاس"
+    },
+    {
+      "name": "Fès-Meknès",
+      "arName": "فاس-مكناس"
+    },
+    {
+      "name": "Figuig",
+      "arName": "فكيك"
+    },
+    {
+      "name": "El Kelâa des Sraghna",
+      "arName": "قلعة السراغنة"
+    },
+    {
+      "name": "Guelmim",
+      "arName": "كلميم"
+    },
+    {
+      "name": "Guelmim-Oued Noun (EH-partial)",
+      "arName": "كلميم-واد نون (EH-جزئي)"
+    },
+    {
+      "name": "L'Oriental",
+      "arName": "لورينتال"
+    },
+    {
+      "name": "Médiouna",
+      "arName": "مديونة"
+    },
+    {
+      "name": "Marrakech",
+      "arName": "مراكش"
+    },
+    {
+      "name": "Marrakesh-Safi",
+      "arName": "مراكش آسفي"
+    },
+    {
+      "name": "M’diq-Fnideq",
+      "arName": "مضيق الفنيدق"
+    },
+    {
+      "name": "Meknès",
+      "arName": "مكناس"
+    },
+    {
+      "name": "Moulay Yacoub",
+      "arName": "مولاي يعقوب"
+    },
+    {
+      "name": "Midelt",
+      "arName": "ميدلت"
+    },
+    {
+      "name": "Oued Ed-Dahab (EH)",
+      "arName": "وادي الذهب (EH)"
+    },
+    {
+      "name": "Oujda-Angad",
+      "arName": "وجدة أنجاد"
+    },
+    {
+      "name": "Ouarzazate",
+      "arName": "ورزازات"
+    },
+    {
+      "name": "Ouezzane",
+      "arName": "وزان"
+    }
+  ],
+  "SD": [
+    {
+      "name": "Red Sea",
+      "arName": "البحر الأحمر"
+    },
+    {
+      "name": "Al Jazirah",
+      "arName": "الجزيرة"
+    },
+    {
+      "name": "Khartoum",
+      "arName": "الخرطوم"
+    },
+    {
+      "name": "Al Qadarif",
+      "arName": "القضارف"
+    },
+    {
+      "name": "White Nile",
+      "arName": "النيل الأبيض"
+    },
+    {
+      "name": "Blue Nile",
+      "arName": "النيل الأزرق"
+    },
+    {
+      "name": "South Darfur",
+      "arName": "جنوب دارفور"
+    },
+    {
+      "name": "South Kordofan",
+      "arName": "جنوب كردفان"
+    },
+    {
+      "name": "Sennar",
+      "arName": "سنار"
+    },
+    {
+      "name": "East Darfur",
+      "arName": "شرق دارفور"
+    },
+    {
+      "name": "North Darfur",
+      "arName": "شمال دارفور"
+    },
+    {
+      "name": "North Kordofan",
+      "arName": "شمال كردفان"
+    },
+    {
+      "name": "Northern",
+      "arName": "شمال كردفان"
+    },
+    {
+      "name": "West Darfur",
+      "arName": "غرب دارفور"
+    },
+    {
+      "name": "West Kordofan",
+      "arName": "غرب كردفان"
+    },
+    {
+      "name": "Kassala",
+      "arName": "كسلا"
+    },
+    {
+      "name": "River Nile",
+      "arName": "نهر النيل"
+    },
+    {
+      "name": "Central Darfur",
+      "arName": "وسط دارفور"
+    }
+  ],
+  "YE": [
+    {
+      "name": "Ibb",
+      "arName": "إب"
+    },
+    {
+      "name": "Abyan",
+      "arName": "أبين"
+    },
+    {
+      "name": "Al Bayda'",
+      "arName": "البيضاء"
+    },
+    {
+      "name": "Al Jawf",
+      "arName": "الجوف"
+    },
+    {
+      "name": "Al Hudaydah",
+      "arName": "الحديدة"
+    },
+    {
+      "name": "Ad Dali'",
+      "arName": "الضالع"
+    },
+    {
+      "name": "Al Mahwit",
+      "arName": "المحويت"
+    },
+    {
+      "name": "Al Mahrah",
+      "arName": "المهرة"
+    },
+    {
+      "name": "Amanat Al Asimah",
+      "arName": "أمانة العاصمة"
+    },
+    {
+      "name": "Ta'izz",
+      "arName": "تعز"
+    },
+    {
+      "name": "Hajjah",
+      "arName": "حجة"
+    },
+    {
+      "name": "Hadhramaut",
+      "arName": "حضرموت"
+    },
+    {
+      "name": "Dhamar",
+      "arName": "ذمار"
+    },
+    {
+      "name": "Raymah",
+      "arName": "ريمة"
+    },
+    {
+      "name": "Socotra",
+      "arName": "سقطرى"
+    },
+    {
+      "name": "Shabwah",
+      "arName": "شبوة"
+    },
+    {
+      "name": "Saada",
+      "arName": "صعدة"
+    },
+    {
+      "name": "Sana'a",
+      "arName": "صنعاء"
+    },
+    {
+      "name": "Adan",
+      "arName": "عدن"
+    },
+    {
+      "name": "Amran",
+      "arName": "عمران"
+    },
+    {
+      "name": "Lahij",
+      "arName": "لحج"
+    },
+    {
+      "name": "Ma'rib",
+      "arName": "مأرب"
+    }
+  ],
+  "PS": [
+    {
+      "name": "Jericho ",
+      "arName": "أريحا"
+    },
+    {
+      "name": "Hebron",
+      "arName": "الخليل"
+    },
+    {
+      "name": "Jerusalem (Quds)",
+      "arName": "القدس (القدس)"
+    },
+    {
+      "name": "Bethlehem",
+      "arName": "بيت لحم"
+    },
+    {
+      "name": "Jenin",
+      "arName": "جنين"
+    },
+    {
+      "name": "Khan Yunis",
+      "arName": "خان يونس"
+    },
+    {
+      "name": "Deir El Balah",
+      "arName": "دير البلح"
+    },
+    {
+      "name": "Ramallah",
+      "arName": "رام الله"
+    },
+    {
+      "name": "Rafah",
+      "arName": "رفح"
+    },
+    {
+      "name": "Salfit",
+      "arName": "سلفيت"
+    },
+    {
+      "name": "North Gaza",
+      "arName": "شمال غزة"
+    },
+    {
+      "name": "Tubas",
+      "arName": "طوباس"
+    },
+    {
+      "name": "Tulkarm",
+      "arName": "طولكرم"
+    },
+    {
+      "name": "Gaza",
+      "arName": "غزة"
+    },
+    {
+      "name": "Qalqilya",
+      "arName": "قلقيلية"
+    },
+    {
+      "name": "Nablus",
+      "arName": "نابلس"
+    }
+  ],
+  "MR": [
+    {
+      "name": "Adrar",
+      "arName": "أدرار"
+    },
+    {
+      "name": "Brakna",
+      "arName": "البراكنة"
+    },
+    {
+      "name": "Trarza",
+      "arName": "الترارزة"
+    },
+    {
+      "name": "Hodh El Gharbi",
+      "arName": "الحوض الغربي"
+    },
+    {
+      "name": "Assaba",
+      "arName": "العصابة"
+    },
+    {
+      "name": "Inchiri",
+      "arName": "اينشيري"
+    },
+    {
+      "name": "Tagant",
+      "arName": "تكانت"
+    },
+    {
+      "name": "Tiris Zemmour",
+      "arName": "تيريس زمور"
+    },
+    {
+      "name": "Gorgol",
+      "arName": "جورجول"
+    },
+    {
+      "name": "Dakhlet Nouadhibou",
+      "arName": "داخلة نواذيبو"
+    },
+    {
+      "name": "Guidimaka",
+      "arName": "غيديماكا"
+    },
+    {
+      "name": "Nouakchott-Nord",
+      "arName": "نواكشوط الشمالية"
+    },
+    {
+      "name": "Nouakchott-Ouest",
+      "arName": "نواكشوط الغربية"
+    },
+    {
+      "name": "Nouakchott-Sud",
+      "arName": "نواكشوط-الجنوب"
+    },
+    {
+      "name": "Hodh Ech Chargui",
+      "arName": "هوده إيتش تشارجي"
+    }
+  ],
+  "LY": [
+    {
+      "name": "Al Butnan",
+      "arName": "البطنان"
+    },
+    {
+      "name": "Jabal al Akhdar",
+      "arName": "الجبل الأخضر"
+    },
+    {
+      "name": "Jafara",
+      "arName": "الجفارة"
+    },
+    {
+      "name": "Jufra",
+      "arName": "الجفرة"
+    },
+    {
+      "name": "Zawiya",
+      "arName": "الزاوية"
+    },
+    {
+      "name": "Kufra",
+      "arName": "الكفرة"
+    },
+    {
+      "name": "Marj",
+      "arName": "المرج"
+    },
+    {
+      "name": "Al Wahat",
+      "arName": "الواحات"
+    },
+    {
+      "name": "Benghazi",
+      "arName": "بنغازي"
+    },
+    {
+      "name": "Jabal al Gharbi",
+      "arName": "جبل الغربي"
+    },
+    {
+      "name": "Derna",
+      "arName": "درنة"
+    },
+    {
+      "name": "Sabha",
+      "arName": "سبها"
+    },
+    {
+      "name": "Sirte",
+      "arName": "سرت"
+    },
+    {
+      "name": "Tripoli",
+      "arName": "طرابلس"
+    },
+    {
+      "name": "Ghat",
+      "arName": "غات"
+    },
+    {
+      "name": "Murzuq",
+      "arName": "مرزق"
+    },
+    {
+      "name": "Murqub",
+      "arName": "مرقب"
+    },
+    {
+      "name": "Misrata",
+      "arName": "مصراتة"
+    },
+    {
+      "name": "Nalut",
+      "arName": "نالوت"
+    },
+    {
+      "name": "Nuqat al Khams",
+      "arName": "نقاط الخمس"
+    },
+    {
+      "name": "Wadi al Hayaa",
+      "arName": "وادي الحياة"
+    },
+    {
+      "name": "Wadi al Shatii",
+      "arName": "وادي الشاطئ"
+    }
+  ],
+  "SO": [
+    {
+      "name": "Awdal",
+      "arName": "اودال"
+    },
+    {
+      "name": "Bari",
+      "arName": "باري"
+    },
+    {
+      "name": "Bakool",
+      "arName": "باكول"
+    },
+    {
+      "name": "Bay",
+      "arName": "باي"
+    },
+    {
+      "name": "Banaadir",
+      "arName": "بنادير"
+    },
+    {
+      "name": "Togdheer",
+      "arName": "تجدير"
+    },
+    {
+      "name": "Galguduud",
+      "arName": "جالجدود"
+    },
+    {
+      "name": "Lower Juba",
+      "arName": "جوبا السفلى"
+    },
+    {
+      "name": "Middle Juba",
+      "arName": "جوبا الوسطى"
+    },
+    {
+      "name": "Gedo",
+      "arName": "جيدو"
+    },
+    {
+      "name": "Sanaag",
+      "arName": "سناج"
+    },
+    {
+      "name": "Sool",
+      "arName": "سول"
+    },
+    {
+      "name": "Lower Shebelle",
+      "arName": "شبيلي السفلى"
+    },
+    {
+      "name": "Middle Shebelle",
+      "arName": "شبيلي الوسطى"
+    },
+    {
+      "name": "Mudug",
+      "arName": "مدوغ"
+    },
+    {
+      "name": "Nugal",
+      "arName": "نوغال"
+    },
+    {
+      "name": "Hiran",
+      "arName": "هيران"
+    },
+    {
+      "name": "Woqooyi Galbeed",
+      "arName": "ووكوي جالبيد"
+    }
+  ],
+  "DJ": [
+    {
+      "name": "Arta",
+      "arName": "ارتا"
+    },
+    {
+      "name": "Obock",
+      "arName": "أوبوك"
+    },
+    {
+      "name": "Tadjourah",
+      "arName": "تاجورة"
+    },
+    {
+      "name": "Djibouti",
+      "arName": "جيبوتي"
+    },
+    {
+      "name": "Dikhil",
+      "arName": "دخيل"
+    },
+    {
+      "name": "Ali Sabieh",
+      "arName": "علي صبيح"
+    }
+  ],
+  "KM": [
+    {
+      "name": "Grande Comore",
+      "arName": "القمر الكبرى"
+    },
+    {
+      "name": "Anjouan",
+      "arName": "أنجوان"
+    },
+    {
+      "name": "Mohéli",
+      "arName": "موهيلي"
+    }
+  ]
+}

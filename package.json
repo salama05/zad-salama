@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@capacitor/app": "^8.1.0",
+    "mongodb": "^7.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "@vite-pwa/assets-generator": "^1.0.2",
+    "vite-plugin-pwa": "^1.2.0"
+  }
+}

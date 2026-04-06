@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">زاد السلامة</string>
+    <string name="title_activity_main">زاد السلامة</string>
+    <string name="package_name">com.zadsalama.app</string>
+    <string name="custom_url_scheme">com.zadsalama.app</string>
+</resources>
