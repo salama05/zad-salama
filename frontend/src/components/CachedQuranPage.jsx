@@ -74,11 +74,11 @@ function CachedQuranPage({
   }
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative flex items-center justify-center w-full overflow-hidden overflow-x-hidden ${className}`}>
       <img
         src={imageSrc}
         alt={`صفحة ${pageNumber} من المصحف الشريف`}
-        className="w-full h-auto object-contain"
+        className={`h-auto mx-auto block w-full object-contain`}
         loading="lazy"
       />
 

@@ -21,6 +21,51 @@ function SurahDetail() {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  // السحب باللمس (Swipe)
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
+  const goToNextPage = () => {
+    if (currentPageIndex < pages.length - 1) {
+      setCurrentPageIndex(prev => prev + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (parseInt(surahId) < 114) {
+      navigate(`/quran/${parseInt(surahId) + 1}`);
+    }
+  };
+
+  const goToPrevPage = () => {
+    if (currentPageIndex > 0) {
+      setCurrentPageIndex(prev => prev - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (parseInt(surahId) > 1) {
+      navigate(`/quran/${parseInt(surahId) - 1}`);
+    }
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const diff = touchStartX.current - touchEndX.current;
+    const threshold = 50; 
+
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        // سحب لليسار (الانتقال للصفحة السابقة في المصحف)
+        goToPrevPage();
+      } else {
+        // سحب لليمين (الانتقال للصفحة التالية في المصحف)
+        goToNextPage();
+      }
+    }
+  };
+
   const savedMushaf = localStorage.getItem('selectedMushaf') || 'hafs';
   const mushafName = localStorage.getItem('selectedMushafName') || 'الرواية';
   const isUnsupportedVisual = savedMushaf === 'qalun' || savedMushaf === 'doori';
@@ -247,7 +292,7 @@ function SurahDetail() {
   }
 
   return (
-    <div className="page-enter-active pb-32">
+    <div className="page-enter-active pb-32 overflow-x-hidden w-screen">
       {/* Sticky Audio Player Top */}
       <div className="sticky top-0 left-0 right-0 bg-zad-bg border-b border-zad-border p-4 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] z-50 mb-6">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
@@ -291,7 +336,12 @@ function SurahDetail() {
           </p>
         </div>
       ) : (
-        <div className="flex flex-col items-center gap-4 w-full max-w-2xl mx-auto">
+        <div 
+          className="flex flex-col items-center gap-4 w-full max-w-2xl mx-auto touch-pan-y overflow-x-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {pages.length > 0 && (
             <div className="relative w-full shadow-lg overflow-hidden border-2 border-zad-border/30 bg-white rounded-md group">
               <CachedQuranPage
@@ -305,62 +355,13 @@ function SurahDetail() {
       )}
 
       {/* Navigation Between Pages and Surahs */}
+      {/* تم إخفاء الأزرار للاعتماد على اللمس وتوفير مساحة كاملة للمصحف */}
       {pages.length > 0 && !isUnsupportedVisual && (
-        <div className="flex justify-between items-center max-w-2xl mx-auto mt-6 mb-4 px-4 font-cairo" dir="rtl">
-
-          {/* Prev Page / Prev Surah */}
-          {currentPageIndex > 0 ? (
-            <button
-              onClick={() => {
-                setCurrentPageIndex(prev => prev - 1);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="flex items-center gap-2 px-4 py-2 rounded-md transition-colors shadow-sm bg-zad-border text-white hover:bg-[#C5A028]"
-            >
-              <Icons.FaArrowRight size={14} />
-              <span>الصفحة السابقة</span>
-            </button>
-          ) : (
-            parseInt(surahId) > 1 ? (
-              <button
-                onClick={() => navigate(`/quran/${parseInt(surahId) - 1}`)}
-                className="flex items-center gap-2 px-3 py-2 rounded-md transition-colors shadow-sm bg-zad-border/80 text-white hover:bg-zad-border text-sm"
-              >
-                <Icons.FaArrowRight size={12} />
-                <span>السورة السابقة</span>
-              </button>
-            ) : <div className="w-32"></div>
-          )}
-
-          {/* Page Indicator */}
-          <div className="text-sm font-bold text-zad-text bg-zad-bg border border-zad-border/30 px-3 py-1 rounded-full shadow-inner text-center min-w-[70px]">
+        <div className="flex justify-center items-center max-w-2xl mx-auto mt-4 mb-2 px-4 font-cairo" dir="rtl">
+          {/* Page Indicator Only */}
+          <div className="text-sm font-bold text-zad-text bg-zad-bg border border-zad-border/30 px-3 py-1 rounded-full shadow-md text-center min-w-[70px] opacity-80">
             {currentPageIndex + 1} / {pages.length}
           </div>
-
-          {/* Next Page / Next Surah */}
-          {currentPageIndex < pages.length - 1 ? (
-            <button
-              onClick={() => {
-                setCurrentPageIndex(prev => prev + 1);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="flex items-center gap-2 px-4 py-2 rounded-md transition-colors shadow-sm bg-zad-border text-white hover:bg-[#C5A028]"
-            >
-              <span>الصفحة التالية</span>
-              <Icons.FaArrowLeft size={14} />
-            </button>
-          ) : (
-            parseInt(surahId) < 114 ? (
-              <button
-                onClick={() => navigate(`/quran/${parseInt(surahId) + 1}`)}
-                className="flex items-center gap-2 px-3 py-2 rounded-md transition-colors shadow-sm bg-zad-border/80 text-white hover:bg-zad-border text-sm"
-              >
-                <span>السورة التالية</span>
-                <Icons.FaArrowLeft size={12} />
-              </button>
-            ) : <div className="w-32"></div>
-          )}
-
         </div>
       )}
 

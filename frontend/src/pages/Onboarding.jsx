@@ -1,26 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppContext } from '../context/AppContext';
 
 function Onboarding() {
-  const [name, setName] = useState('');
   const navigate = useNavigate();
-  const { sessionId } = useAppContext();
 
   const handleContinue = (e) => {
     e.preventDefault();
-    if (name.trim()) localStorage.setItem('zadUserName', name.trim());
+    localStorage.setItem('zadUserName', 'ضيف');
     navigate('/home');
   };
-
-  const handleSkip = () => {
-    // Save empty or placeholder
-    localStorage.setItem('zadUserName', '');
-    navigate('/home');
-  };
-
-  // If already onboarded, maybe redirect automatically in a real app,
-  // but for now let's just show it.
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] page-enter-active">
@@ -31,29 +19,18 @@ function Onboarding() {
         <h1 className="text-4xl font-amiri font-bold mb-4 text-[#D4B595] drop-shadow-sm">زاد السلامة</h1>
         <p className="mb-8 text-lg font-cairo">تطبيق إسلامي شامل بروح المصحف الشريف</p>
         
-        <form onSubmit={handleContinue} className="relative z-10 flex flex-col space-y-4">
-          <input 
-            type="text" 
-            placeholder="اسمك الكريم (اختياري)" 
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-zad-border bg-white bg-opacity-50 text-center font-cairo text-lg focus:outline-none focus:ring-2 focus:ring-zad-border transition"
-          />
-          <button 
-            type="submit" 
-            className="w-full bg-[#D4B595] hover:bg-[#C5A028] text-white font-bold py-3 px-6 rounded-lg transition-colors font-cairo text-xl shadow-md"
-          >
-            متابعة
-          </button>
+        <div className="relative z-10 flex flex-col items-center space-y-6">
+          <p className="text-xl font-cairo font-semibold text-[#8B6B4A]">
+            نسأل الله أن يرزقنا و إياكم العلم النافع والعمل الصالح
+          </p>
           
           <button 
-            type="button" 
-            onClick={handleSkip}
-            className="text-sm font-cairo underline decoration-zad-border/50 hover:text-zad-border transition-colors mt-2"
+            onClick={handleContinue}
+            className="w-full bg-[#D4B595] hover:bg-[#C5A028] text-white font-bold py-3 px-6 rounded-lg transition-colors font-cairo text-xl shadow-md"
           >
-            تخطي
+            الدخول للتطبيق
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );

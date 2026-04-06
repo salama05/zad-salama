@@ -230,7 +230,7 @@ function MushafReader() {
     return localStorage.getItem('mushaf-dark-mode') === 'true';
   });
   const [fontSize, setFontSize] = useState(() => {
-    return parseInt(localStorage.getItem('mushaf-font-size') || '28');
+    return parseInt(localStorage.getItem('mushaf-font-size') || '12');
   });
   
   // مرجع للحاوية للسحب
@@ -303,11 +303,11 @@ function MushafReader() {
 
     if (Math.abs(diff) > threshold) {
       if (diff > 0) {
-        // سحب لليسار = الصفحة التالية (في العربية، القراءة من اليمين لليسار)
-        prevPage();
-      } else {
-        // سحب لليمين = الصفحة السابقة
+        // سحب لليسار
         nextPage();
+      } else {
+        // سحب لليمين
+        prevPage();
       }
     }
   };
@@ -409,7 +409,7 @@ function MushafReader() {
   return (
     <div 
       ref={containerRef}
-      className={`min-h-screen flex flex-col select-none ${bgColor}`}
+      className={`min-h-screen flex flex-col select-none overflow-x-hidden w-screen ${bgColor}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -534,14 +534,14 @@ function MushafReader() {
           {/* التحكم في حجم الخط */}
           <div className={`flex items-center justify-center gap-4 mt-6 ${textColor}`}>
             <button
-              onClick={() => setFontSize(Math.max(18, fontSize - 2))}
+              onClick={() => setFontSize(Math.max(10, fontSize - 2))}
               className={`w-10 h-10 rounded-full ${cardBg} shadow-md flex items-center justify-center text-xl font-bold`}
             >
               -
             </button>
             <span className="font-cairo text-sm">حجم الخط: {fontSize}</span>
             <button
-              onClick={() => setFontSize(Math.min(48, fontSize + 2))}
+              onClick={() => setFontSize(Math.min(36, fontSize + 2))}
               className={`w-10 h-10 rounded-full ${cardBg} shadow-md flex items-center justify-center text-xl font-bold`}
             >
               +
