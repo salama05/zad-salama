@@ -83,7 +83,7 @@ function CachedQuranPage({
       />
 
       {/* رقم الصفحة */}
-      <div className="absolute bottom-1 right-0 left-0 text-center opacity-40 font-cairo text-[10px] text-black bg-white/60 w-fit mx-auto px-3 rounded-t-lg shadow-sm">
+      <div className="absolute -bottom-6 right-0 left-0 text-center opacity-40 font-cairo text-[10px] text-black bg-white/60 w-fit mx-auto px-3 rounded-t-lg shadow-sm">
         صفحة {pageNumber}
       </div>
     </div>

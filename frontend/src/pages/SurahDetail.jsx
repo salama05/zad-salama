@@ -337,7 +337,7 @@ function SurahDetail() {
         </div>
       ) : (
         <div 
-          className="flex flex-col items-center gap-4 w-full max-w-2xl mx-auto touch-pan-y overflow-x-hidden"
+          className="flex flex-col items-center gap-0 w-full max-w-2xl mx-auto touch-pan-y overflow-x-hidden"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -357,7 +357,7 @@ function SurahDetail() {
       {/* Navigation Between Pages and Surahs */}
       {/* تم إخفاء الأزرار للاعتماد على اللمس وتوفير مساحة كاملة للمصحف */}
       {pages.length > 0 && !isUnsupportedVisual && (
-        <div className="flex justify-center items-center max-w-2xl mx-auto mt-4 mb-2 px-4 font-cairo" dir="rtl">
+        <div className="flex justify-center items-center max-w-2xl mx-auto mt-0 mb-2 px-4 font-cairo" dir="rtl">
           {/* Page Indicator Only */}
           <div className="text-sm font-bold text-zad-text bg-zad-bg border border-zad-border/30 px-3 py-1 rounded-full shadow-md text-center min-w-[70px] opacity-80">
             {currentPageIndex + 1} / {pages.length}
