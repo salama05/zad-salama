@@ -51,7 +51,7 @@ const getPageVerses = (quranData, pageNumber) => {
           text: ayah.text,
           numberInSurah: ayah.numberInSurah,
           surahNumber: surah.number,
-          juz: ayah.juz
+          page: ayah.page
         });
       }
     }
@@ -72,6 +72,7 @@ const SURAH_PAGES = [
   { number: 8, name: 'الأنفال', page: 177 },
   { number: 9, name: 'التوبة', page: 187 },
   { number: 10, name: 'يونس', page: 208 },
+  { number: 11, name: 'هود', page: 221 },
   { number: 12, name: 'يوسف', page: 235 },
   { number: 13, name: 'الرعد', page: 249 },
   { number: 14, name: 'إبراهيم', page: 255 },
@@ -219,8 +220,10 @@ function MushafReader() {
   // حالات البيانات
   const [quranData, setQuranData] = useState(null);
   const [pageVerses, setPageVerses] = useState([]);
+  const [nextPageVerses, setNextPageVerses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [screenOffset, setScreenOffset] = useState(0); // لتمرير الشاشة بأكملها
 
   // حالات واجهة المستخدم
   const [showControls, setShowControls] = useState(true);
@@ -253,21 +256,24 @@ function MushafReader() {
     loadData();
   }, []);
 
-  // تحديث آيات الصفحة عند تغيير الصفحة
+  // تحديث آيات الصفحات الحالية والموالية
   useEffect(() => {
     if (quranData) {
       const verses = getPageVerses(quranData, currentPage);
       setPageVerses(verses);
+      setScreenOffset(0); // إعادة تعيين التمرير
+      
+      // تحميل الصفحة الموالية
+      if (currentPage < 604) {
+        const nextVerses = getPageVerses(quranData, currentPage + 1);
+        setNextPageVerses(nextVerses);
+      } else {
+        setNextPageVerses([]);
+      }
 
       // تسجيل قراءة الصفحة للورد اليومي
       if (wirdSettings.enabled) {
         trackPageRead(currentPage);
-      }
-
-      // العودة لأعلى الصفحة عند التبديل
-      const scrollContainer = document.getElementById('quran-scroll-container');
-      if (scrollContainer) {
-        scrollContainer.scrollTop = 0;
       }
     }
   }, [quranData, currentPage, wirdSettings.enabled, trackPageRead]);
@@ -309,28 +315,26 @@ function MushafReader() {
       const deltaTime = currentTime - lastTime;
       lastTime = currentTime;
 
-      // حساب عدد البيكسلات في الثانية استناداً لطلبك الحرفي:
-      // 1 (سريع): 40 بكسل بالثانية (سطر في ثانية)
-      // 2 (متوسط): 20 بكسل بالثانية (سطر كل ثانيتين)
-      // 3 (بطيء): 10 بكسل بالثانية (سطر كل 3 أو 4 ثواني)
-      const pixelsPerSecond = autoScrollSpeed === 1 ? 40 : autoScrollSpeed === 2 ? 20 : 10;
+      // حساب عدد البيكسلات في الثانية - سرعات تصعيد الشاشة:
+      // 1 (سريع): 80 بكسل/ثانية (صفحة في ~6 ثوان)
+      // 2 (متوسط): 50 بكسل/ثانية (صفحة في ~10 ثوان)
+      // 3 (بطيء): 30 بكسل/ثانية (صفحة في ~17 ثانية)
+      const pixelsPerSecond = autoScrollSpeed === 1 ? 5 : autoScrollSpeed === 2 ? 15 : 30;
 
-      accumulator += (pixelsPerSecond * deltaTime) / 1000;
-
-      if (accumulator >= 1) {
-        const scrollContainer = document.getElementById('quran-scroll-container');
-        if (scrollContainer) {
-          const pixelsToScroll = Math.floor(accumulator);
-          // نزول تدريجي بدون تدخل CSS
-          scrollContainer.scrollTop += pixelsToScroll;
-          accumulator -= pixelsToScroll;
-
-          // الانتقال التلقائي للصفحة الموالية عند الوصول للأسفل
-          if (Math.ceil(scrollContainer.scrollTop + scrollContainer.clientHeight) >= scrollContainer.scrollHeight) {
-            nextPage();
-          }
+      setScreenOffset((prev) => {
+        let newOffset = prev + (pixelsPerSecond * deltaTime) / 1000;
+        
+        // عندما تصل الشاشة لارتفاع الشاشة (100vh)، انتقل للصفحة الموالية
+        // الارتفاع التقريبي للشاشة بالبكسل
+        const screenHeight = window.innerHeight;
+        
+        if (newOffset >= screenHeight && currentPage < 604) {
+          nextPage();
+          return 0;
         }
-      }
+        
+        return newOffset;
+      });
       animationFrameId = requestAnimationFrame(scrollLoop);
     };
 
@@ -436,40 +440,30 @@ function MushafReader() {
     return 1;
   };
 
-  const currentSurah = getCurrentSurah();
-  const currentJuz = getCurrentJuz();
-
-  // دالة لحساب رقم الحزب
-  const getCurrentHizb = (page) => {
-    if (page <= 1) return 1;
-    return Math.ceil((page - 1) / 10);
-  };
-  const currentHizb = getCurrentHizb(currentPage);
-
-  // مصفوفة لأسماء الأجزاء بالعربي
-  const juzNames = [
-    "الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس", "السابع", "الثامن", "التاسع", "العاشر",
-    "الحادي عشر", "الثاني عشر", "الثالث عشر", "الرابع عشر", "الخامس عشر", "السادس عشر", "السابع عشر", "الثامن عشر", "التاسع عشر", "العشرون",
-    "واحد والعشرون", "الثاني والعشرون", "الثالث والعشرون", "الرابع والعشرون", "الخامس والعشرون", "السادس والعشرون", "السابع والعشرون", "الثامن والعشرون", "التاسع والعشرون", "الثلاثون"
-  ];
-
-  // ألوان الوضع الليلي والعادي
-  const bgColor = isDarkMode ? 'bg-[#1a1a1a]' : 'bg-[#FBF8F1]';
-  const textColor = isDarkMode ? 'text-[#E5D9C7]' : 'text-[#8B7355]';
-  const ayahTextColor = isDarkMode ? 'text-[#F5EFE0]' : 'text-[#2D2A26]';
-  const cardBg = isDarkMode ? 'bg-[#2a2a2a]' : 'bg-white';
-  const footerBg = isDarkMode ? 'from-[#1a1a1a]' : 'from-[#FBF8F1]';
-
   if (isLoading || bookmarkLoading) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-[#1a1a1a]' : 'bg-[#FBF8F1]'}`}>
         <div className="text-center">
           <div className={`animate-spin rounded-full h-16 w-16 border-4 border-t-transparent mx-auto mb-4 ${isDarkMode ? 'border-[#D4AF37]' : 'border-[#D4AF37]'}`}></div>
           <p className={`font-cairo ${isDarkMode ? 'text-[#E5D9C7]' : 'text-[#8B7355]'}`}>جارِ تحميل المصحف...</p>
+          <p className={`font-cairo text-sm mt-2 ${isDarkMode ? 'text-[#A0917B]' : 'text-[#A0917B]'}`}>
+            {isOffline ? '📴 يعمل بدون إنترنت' : '🌐 متصل'}
+          </p>
         </div>
       </div>
     );
   }
+
+  const currentSurah = getCurrentSurah();
+  const currentJuz = getCurrentJuz();
+
+  // ألوان الوضع الليلي والعادي
+  const bgColor = isDarkMode ? 'bg-[#1a1a1a]' : 'bg-[#FBF8F1]';
+  const textColor = isDarkMode ? 'text-[#E5D9C7]' : 'text-[#8B7355]';
+  const ayahTextColor = isDarkMode ? 'text-[#F5EFE0]' : 'text-[#2D2A26]';
+  const headerBg = isDarkMode ? 'from-[#1a1a1a]' : 'from-[#FBF8F1]';
+  const footerBg = isDarkMode ? 'from-[#1a1a1a]' : 'from-[#FBF8F1]';
+  const cardBg = isDarkMode ? 'bg-[#2a2a2a]' : 'bg-white';
 
   return (
     <div
@@ -478,7 +472,7 @@ function MushafReader() {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      onClick={toggleControls}
+      onClick={(e) => e.stopPropagation()}
     >
       {/* مؤشر العمل بدون إنترنت */}
       {isOffline && (
@@ -528,9 +522,7 @@ function MushafReader() {
 
           {/* اليسار: الجزء والحزب */}
           <div className={`relative z-10 font-amiri text-xs sm:text-base ${textColor} flex items-center gap-1`}>
-            <span>الجُزْءُ {juzNames[currentJuz - 1] || currentJuz}</span>
-            <span className="mx-1 opacity-40">|</span>
-            <span>الحِزْبُ {currentHizb.toLocaleString('ar-EG')}</span>
+            <span>الجُزْءُ {currentJuz}</span>
           </div>
         </div>
 
@@ -546,135 +538,385 @@ function MushafReader() {
         )}
       </header>
 
-      {/* منطقة عرض الصفحة - النصوص القرآنية */}
-      <main id="quran-scroll-container" className="flex-1 pt-10 pb-24 px-3 md:px-6 overflow-y-auto flex flex-col justify-start relative">
-        <div className="max-w-xl mx-auto w-full flex flex-col justify-center min-h-full">
-          {/* رأس الصفحة - إزاحة بسيطة للمحتوى */}
-          <div className="mb-4" />
+      {/* منطقة عرض الصفحة - الشاشة تصعد بأكملها */}
+      <main className="flex-1 overflow-hidden flex flex-col relative">
+        {/* حاوية التمرير - دو صفحة (الحالية + الموالية) */}
+        <div 
+          className="h-full w-full flex flex-col"
+          style={{
+            transform: `translateY(-${screenOffset}px)`,
+            transition: isAutoScrolling ? 'none' : 'transform 0.3s ease-out'
+          }}
+        >
+          {/* الصفحة الحالية - النصف الأول */}
+          <div className="h-screen w-full flex-shrink-0 overflow-hidden flex flex-col justify-center pb-2 relative">
+            <div className="flex-1 overflow-hidden flex flex-col justify-center">
+              <div className="max-w-xl mx-auto w-full px-3 md:px-6 py-4">
+                {pageVerses.length === 0 ? (
+                  <div className={`text-center py-8 ${textColor}`}>
+                    <p className="font-cairo">لا توجد آيات في هذه الصفحة</p>
+                  </div>
+                ) : (
+                  <div className="text-justify w-full" style={{ fontSize: 'clamp(16px, 2.8vh, 28px)', lineHeight: '1.8', textAlignLast: 'center' }}>
+                    {pageVerses.map((item, index) => {
+                      if (item.type === 'surah-header') {
+                        return (
+                          <div key={`header-${item.surahNumber}`} className="my-6 relative w-full flex justify-center px-2">
+                            {/* برواز السورة الزخرفي الفاخر الإسلامي */}
+                            <div className="relative w-full max-w-3xl">
+                              <svg viewBox="0 0 800 120" preserveAspectRatio="none" className={`w-full ${isDarkMode ? 'drop-shadow' : 'drop-shadow-sm'}`} style={{ height: '100px' }}>
+                                <defs>
+                                  <pattern id="crosshatch" patternUnits="userSpaceOnUse" width="20" height="20">
+                                    <line x1="0" y1="0" x2="20" y2="20" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.3" />
+                                    <line x1="20" y1="0" x2="0" y2="20" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.3" />
+                                  </pattern>
+                                </defs>
 
-          {/* محتوى الصفحة - بدون صندوق */}
-          {pageVerses.length === 0 ? (
-            <div className={`text-center py-12 ${textColor}`}>
-              <p className="font-cairo">لا توجد آيات في هذه الصفحة</p>
-            </div>
-          ) : (
-            <div className="text-justify w-full px-2 sm:px-4 md:px-8" style={{ fontSize: 'clamp(14px, 2.5vh, 26px)', lineHeight: '1.87', textAlignLast: 'center' }}>
-              {(() => {
-                const shownSurahs = new Set();
-                return pageVerses.map((item, index) => {
-                  if (item.type === 'surah-header') {
-                    return (
-                      <div key={`header-${item.surahNumber}`} className="my-6 relative px-1 w-full flex justify-center">
-                        {/* برواز السورة الزخرفي الفاخر (يظهر على جميع الشاشات) */}
-                        <div className="relative w-full max-w-[95%] sm:max-w-xl h-14 sm:h-20 flex items-center justify-center">
-                          {/* إطارات البرواز الذهبية (تتمدد تلقائيا بدون تشوه السماكة) */}
-                          <svg viewBox="0 0 1000 100" preserveAspectRatio="none" className={`absolute inset-0 w-full h-full drop-shadow-sm ${isDarkMode ? 'fill-[#2a2a2a] text-[#D4AF37]' : 'fill-[#FDF9F1] text-[#A68A5E]'}`}>
-                            {/* الخلفية العميقة */}
-                            <path d="M0,50 L20,5 H980 L1000,50 L980,95 L20,95 Z" fill="currentColor" />
-                            {/* الإطار الخارجي */}
-                            <path d="M0,50 L20,5 H980 L1000,50 L980,95 L20,95 Z" fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke" />
-                            {/* الإطار الداخلي */}
-                            <path d="M10,50 L27,12 H973 L990,50 L973,88 L27,88 Z" fill="none" stroke="currentColor" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-                            {/* خط الفصل الأيسر */}
-                            <line x1="150" y1="12" x2="185" y2="50" stroke="currentColor" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-                            <line x1="185" y1="50" x2="150" y2="88" stroke="currentColor" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-                            {/* خط الفصل الأيمن */}
-                            <line x1="850" y1="12" x2="815" y2="50" stroke="currentColor" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-                            <line x1="815" y1="50" x2="850" y2="88" stroke="currentColor" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-                          </svg>
+                                {/* الإطار الخارجي الرئيسي */}
+                                <rect x="20" y="15" width="760" height="90" fill="none" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="3" />
+                                <rect x="26" y="21" width="748" height="78" fill="none" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.6" />
 
-                          {/* الزخرفة النبايتة اليسرى (تحافظ على شكلها الدائري دائما) */}
-                          <svg viewBox="0 0 140 100" preserveAspectRatio="xMinYMid meet" className={`absolute left-0 inset-y-0 h-full w-[25%] max-w-[120px] pointer-events-none ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#A68A5E]'}`}>
-                            <g transform="translate(80, 50)">
-                              <circle cx="0" cy="0" r="19" fill="none" stroke="currentColor" strokeWidth="1.2" />
-                              <circle cx="0" cy="0" r="6" fill="currentColor" />
-                              <path d="M0,-19 Q12,0 0,19 Q-12,0 0,-19 Z" fill="currentColor" className="opacity-40" />
-                              <path d="M-19,0 Q0,12 19,0 Q0,-12 -19,0 Z" fill="currentColor" className="opacity-40" />
-                            </g>
-                          </svg>
+                                {/* الزوايا الزخرفية */}
+                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="2" fill="none">
+                                  {/* الزاوية العلوية اليسرى */}
+                                  <path d="M20,15 L35,15 M20,15 L20,30" />
+                                  <circle cx="20" cy="15" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
+                                  
+                                  {/* الزاوية العلوية اليمنى */}
+                                  <path d="M780,15 L765,15 M780,15 L780,30" />
+                                  <circle cx="780" cy="15" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
+                                  
+                                  {/* الزاوية السفلية اليسرى */}
+                                  <path d="M20,105 L35,105 M20,105 L20,90" />
+                                  <circle cx="20" cy="105" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
+                                  
+                                  {/* الزاوية السفلية اليمنى */}
+                                  <path d="M780,105 L765,105 M780,105 L780,90" />
+                                  <circle cx="780" cy="105" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
+                                </g>
 
-                          {/* الزخرفة النباتية اليمنى */}
-                          <svg viewBox="0 0 140 100" preserveAspectRatio="xMaxYMid meet" className={`absolute right-0 inset-y-0 h-full w-[25%] max-w-[120px] pointer-events-none ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#A68A5E]'}`}>
-                            <g transform="translate(60, 50)">
-                              <circle cx="0" cy="0" r="19" fill="none" stroke="currentColor" strokeWidth="1.2" />
-                              <circle cx="0" cy="0" r="6" fill="currentColor" />
-                              <path d="M0,-19 Q12,0 0,19 Q-12,0 0,-19 Z" fill="currentColor" className="opacity-40" />
-                              <path d="M-19,0 Q0,12 19,0 Q0,-12 -19,0 Z" fill="currentColor" className="opacity-40" />
-                            </g>
-                          </svg>
+                                {/* النقوش الزخرفية المركزية */}
+                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1.5" fill="none" opacity="0.8">
+                                  {/* يسار */}
+                                  <circle cx="45" cy="60" r="8" />
+                                  <path d="M40,60 L50,60 M45,55 L45,65" />
+                                  <path d="M38,52 L52,68 M52,52 L38,68" />
+                                  
+                                  {/* يمين */}
+                                  <circle cx="755" cy="60" r="8" />
+                                  <path d="M750,60 L760,60 M755,55 L755,65" />
+                                  <path d="M748,52 L762,68 M762,52 L748,68" />
+                                </g>
 
-                          {/* اسم السورة المنتصف */}
-                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <h2 className={`font-amiri font-bold pt-1.5 drop-shadow-sm tracking-wide ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#2D2A26]'}`} style={{ fontSize: 'clamp(18px, 3vh, 32px)' }}>
-                              سُورَةُ {item.surahName.replace(/^سُورَةُ\s+/, '')}
-                            </h2>
+                                {/* الزخرفة الوسطى العلوية */}
+                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1.5" fill="none" opacity="0.7">
+                                  <circle cx="100" cy="20" r="6" />
+                                  <circle cx="150" cy="20" r="6" />
+                                  <circle cx="200" cy="20" r="6" />
+                                  <circle cx="250" cy="20" r="6" />
+                                  <circle cx="300" cy="20" r="6" />
+                                  <circle cx="350" cy="20" r="6" />
+                                  <circle cx="400" cy="20" r="6" />
+                                  <circle cx="450" cy="20" r="6" />
+                                  <circle cx="500" cy="20" r="6" />
+                                  <circle cx="550" cy="20" r="6" />
+                                  <circle cx="600" cy="20" r="6" />
+                                  <circle cx="650" cy="20" r="6" />
+                                  <circle cx="700" cy="20" r="6" />
+                                </g>
+
+                                {/* الزخرفة الوسطى السفلية */}
+                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1.5" fill="none" opacity="0.7">
+                                  <circle cx="100" cy="100" r="6" />
+                                  <circle cx="150" cy="100" r="6" />
+                                  <circle cx="200" cy="100" r="6" />
+                                  <circle cx="250" cy="100" r="6" />
+                                  <circle cx="300" cy="100" r="6" />
+                                  <circle cx="350" cy="100" r="6" />
+                                  <circle cx="400" cy="100" r="6" />
+                                  <circle cx="450" cy="100" r="6" />
+                                  <circle cx="500" cy="100" r="6" />
+                                  <circle cx="550" cy="100" r="6" />
+                                  <circle cx="600" cy="100" r="6" />
+                                  <circle cx="650" cy="100" r="6" />
+                                  <circle cx="700" cy="100" r="6" />
+                                </g>
+
+                                {/* الخطوط الزخرفية الجانبية */}
+                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.5">
+                                  <line x1="70" y1="30" x2="70" y2="90" />
+                                  <line x1="730" y1="30" x2="730" y2="90" />
+                                  <path d="M75,40 L65,50 L75,60 L65,70 L75,80" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" fill="none" />
+                                  <path d="M725,40 L735,50 L725,60 L735,70 L725,80" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" fill="none" />
+                                </g>
+                              </svg>
+
+                              {/* اسم السورة */}
+                              <h2 className={`absolute inset-0 flex items-center justify-center font-amiri font-bold drop-shadow-md tracking-wider ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#2D2A26]'}`} style={{ fontSize: 'clamp(20px, 4vh, 36px)' }}>
+                                سُورَةُ {item.surahName.replace(/^سُورَةُ\s+/, '')}
+                              </h2>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    );
-                  }
+                        );
+                      }
 
-                  // الآيات
-                  const isFirstAyah = item.numberInSurah === 1;
-                  const isFatiha = item.surahNumber === 1;
-                  const isTawbah = item.surahNumber === 9;
+                      // تعريف المتغيرات المطلوبة
+                      const isFirstAyah = item.numberInSurah === 1;
+                      const isTawbah = item.surahNumber === 9;
+                      let displayBasmala = false;
+                      let ayahText = item.text;
 
-                  let displayBasmala = false;
-                  let ayahText = item.text;
+                      if (isFirstAyah && !isTawbah) {
+                        const cleanText = ayahText.replace(/^\ufeff/, '').trim();
+                        // البسملة دائماً تتكون من 4 كلمات مفصولة بمسافات
+                        // نبحث عن المسافة الرابعة لتحديد نهاية البسملة بدقة
+                        if (cleanText.startsWith('بِسْمِ')) {
+                          let spaceCount = 0;
+                          let basmalaEndIndex = -1;
+                          for (let i = 0; i < cleanText.length; i++) {
+                            if (cleanText[i] === ' ' && cleanText[i-1] !== ' ') {
+                              spaceCount++;
+                              if (spaceCount === 4) {
+                                basmalaEndIndex = i;
+                                break;
+                              }
+                            }
+                          }
+                          if (basmalaEndIndex > 0) {
+                            console.log('✅ Found Basmala in Surah', item.surahNumber);
+                            displayBasmala = true;
+                            ayahText = cleanText.substring(basmalaEndIndex).trim();
+                          }
+                        }
+                      }
 
-                  // البحث عن البسملة في بداية الآية الأولى (باستثناء التوبة)
-                  if (isFirstAyah && !isTawbah) {
-                    // إزالة حرف BOM إن وجد وتنظيف النص
-                    const cleanText = ayahText.replace(/^\ufeff/, '').trim();
-                    const basmalaPattern = /^بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ/;
-
-                    if (basmalaPattern.test(cleanText)) {
-                      displayBasmala = true;
-                      // إزالة البسملة من النص الأصلي لترك بقية الآية (أو جعل النص فارغاً للفاتحة)
-                      ayahText = cleanText.replace(basmalaPattern, '').trim();
-                    }
-                  }
-
-                  return (
-                    <React.Fragment key={`ayah-container-${item.surahNumber}-${item.numberInSurah}`}>
-                      {displayBasmala && (
-                        <div className={`block text-center font-amiri my-0.5 w-full ${ayahTextColor}`} style={{ fontSize: 'clamp(14px, 2.4vh, 22px)' }}>
-                          بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-                          {isFatiha && (
-                            <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[0.6em] font-bold mx-2 ${isDarkMode ? 'bg-[#D4AF37]/40 text-[#D4AF37]' : 'bg-[#D4AF37]/25 text-[#8B7355]'}`}>
-                              {item.numberInSurah.toLocaleString('ar-EG')}
+                      return (
+                        <React.Fragment key={`ayah-container-${item.surahNumber}-${item.numberInSurah}`}>
+                          {displayBasmala && (
+                            <div className={`text-center font-amiri my-3 w-full ${ayahTextColor}`} style={{ fontSize: 'clamp(14px, 2.4vh, 22px)' }}>
+                              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                            </div>
+                          )}
+                          {ayahText.length > 0 && (
+                            <span key={`ayah-${item.surahNumber}-${item.numberInSurah}`} className={`font-amiri ${ayahTextColor}`}>
+                              {ayahText}
+                              <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[0.6em] font-bold mx-0.5 ${isDarkMode ? 'bg-[#D4AF37]/40 text-[#D4AF37]' : 'bg-[#D4AF37]/25 text-[#8B7355]'}`}>
+                                {item.numberInSurah.toLocaleString('ar-EG')}
+                              </span>{' '}
                             </span>
                           )}
-                        </div>
-                      )}
-                      {/* عرض الآية فقط إذا كان هناك نص متبقي (لتجنب ظهور رقم 1 مكرر أو مساحة فارغة للفاتحة) */}
-                      {ayahText.length > 0 && (
-                        <span key={`ayah-${item.surahNumber}-${item.numberInSurah}`} className={`font-amiri ${ayahTextColor}`}>
-                          {ayahText}
-                          {(ayahText.trim() !== '' || !displayBasmala) && (
-                            <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[0.6em] font-bold mx-0.5 ${isDarkMode ? 'bg-[#D4AF37]/40 text-[#D4AF37]' : 'bg-[#D4AF37]/25 text-[#8B7355]'}`}>
-                              {item.numberInSurah.toLocaleString('ar-EG')}
-                            </span>
-                          )}
-                          {' '}
-                        </span>
-                      )}
-                    </React.Fragment>
-                  );
-                });
-              })()}
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
-          )}
+            {/* رقم الصفحة الحالي */}
+            <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center">
+              <div className={`flex items-center justify-center ${textColor}`}>
+                <button
+                  onClick={() => setShowJumpModal(true)}
+                  className={`relative flex items-center justify-center gap-2 px-6 py-2 font-cairo font-bold text-sm transition ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#8B7355]'}`}
+                >
+                  <div className="absolute inset-0 bg-no-repeat bg-center bg-contain" style={{ backgroundImage: "url('/page-bg.svg')", filter: isDarkMode ? 'invert(85%) sepia(25%) saturate(1500%) hue-rotate(350deg)' : 'none' }}></div>
+                  <FaBookOpen className="relative z-10" />
+                  <span className="relative z-10">{currentPage.toString().padStart(3, '0')}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* الصفحة الموالية - النصف الثاني */}
+          <div className="h-screen w-full flex-shrink-0 overflow-hidden flex flex-col justify-center pb-2 relative">
+            <div className="flex-1 overflow-hidden flex flex-col justify-center">
+              <div className="max-w-xl mx-auto w-full px-3 md:px-6 py-4">
+                {nextPageVerses.length === 0 ? (
+                  <div className={`text-center py-8 ${textColor} opacity-50`}>
+                    <p className="font-cairo">نهاية المصحف الشريف</p>
+                  </div>
+                ) : (
+                  <div className="text-justify w-full" style={{ fontSize: 'clamp(16px, 2.8vh, 28px)', lineHeight: '1.8', textAlignLast: 'center' }}>
+                    {nextPageVerses.map((item, index) => {
+                      if (item.type === 'surah-header') {
+                        return (
+                          <div key={`next-header-${item.surahNumber}`} className="my-6 relative w-full flex justify-center px-2">
+                            {/* برواز السورة الزخرفي الفاخر الإسلامي */}
+                            <div className="relative w-full max-w-3xl">
+                              <svg viewBox="0 0 800 120" preserveAspectRatio="none" className={`w-full ${isDarkMode ? 'drop-shadow' : 'drop-shadow-sm'}`} style={{ height: '100px' }}>
+                                <defs>
+                                  <pattern id="crosshatch" patternUnits="userSpaceOnUse" width="20" height="20">
+                                    <line x1="0" y1="0" x2="20" y2="20" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.3" />
+                                    <line x1="20" y1="0" x2="0" y2="20" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.3" />
+                                  </pattern>
+                                </defs>
+
+                                {/* الإطار الخارجي الرئيسي */}
+                                <rect x="20" y="15" width="760" height="90" fill="none" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="3" />
+                                <rect x="26" y="21" width="748" height="78" fill="none" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.6" />
+
+                                {/* الزوايا الزخرفية */}
+                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="2" fill="none">
+                                  {/* الزاوية العلوية اليسرى */}
+                                  <path d="M20,15 L35,15 M20,15 L20,30" />
+                                  <circle cx="20" cy="15" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
+                                  
+                                  {/* الزاوية العلوية اليمنى */}
+                                  <path d="M780,15 L765,15 M780,15 L780,30" />
+                                  <circle cx="780" cy="15" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
+                                  
+                                  {/* الزاوية السفلية اليسرى */}
+                                  <path d="M20,105 L35,105 M20,105 L20,90" />
+                                  <circle cx="20" cy="105" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
+                                  
+                                  {/* الزاوية السفلية اليمنى */}
+                                  <path d="M780,105 L765,105 M780,105 L780,90" />
+                                  <circle cx="780" cy="105" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
+                                </g>
+
+                                {/* النقوش الزخرفية المركزية */}
+                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1.5" fill="none" opacity="0.8">
+                                  {/* يسار */}
+                                  <circle cx="45" cy="60" r="8" />
+                                  <path d="M40,60 L50,60 M45,55 L45,65" />
+                                  <path d="M38,52 L52,68 M52,52 L38,68" />
+                                  
+                                  {/* يمين */}
+                                  <circle cx="755" cy="60" r="8" />
+                                  <path d="M750,60 L760,60 M755,55 L755,65" />
+                                  <path d="M748,52 L762,68 M762,52 L748,68" />
+                                </g>
+
+                                {/* الزخرفة الوسطى العلوية */}
+                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1.5" fill="none" opacity="0.7">
+                                  <circle cx="100" cy="20" r="6" />
+                                  <circle cx="150" cy="20" r="6" />
+                                  <circle cx="200" cy="20" r="6" />
+                                  <circle cx="250" cy="20" r="6" />
+                                  <circle cx="300" cy="20" r="6" />
+                                  <circle cx="350" cy="20" r="6" />
+                                  <circle cx="400" cy="20" r="6" />
+                                  <circle cx="450" cy="20" r="6" />
+                                  <circle cx="500" cy="20" r="6" />
+                                  <circle cx="550" cy="20" r="6" />
+                                  <circle cx="600" cy="20" r="6" />
+                                  <circle cx="650" cy="20" r="6" />
+                                  <circle cx="700" cy="20" r="6" />
+                                </g>
+
+                                {/* الزخرفة الوسطى السفلية */}
+                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1.5" fill="none" opacity="0.7">
+                                  <circle cx="100" cy="100" r="6" />
+                                  <circle cx="150" cy="100" r="6" />
+                                  <circle cx="200" cy="100" r="6" />
+                                  <circle cx="250" cy="100" r="6" />
+                                  <circle cx="300" cy="100" r="6" />
+                                  <circle cx="350" cy="100" r="6" />
+                                  <circle cx="400" cy="100" r="6" />
+                                  <circle cx="450" cy="100" r="6" />
+                                  <circle cx="500" cy="100" r="6" />
+                                  <circle cx="550" cy="100" r="6" />
+                                  <circle cx="600" cy="100" r="6" />
+                                  <circle cx="650" cy="100" r="6" />
+                                  <circle cx="700" cy="100" r="6" />
+                                </g>
+
+                                {/* الخطوط الزخرفية الجانبية */}
+                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.5">
+                                  <line x1="70" y1="30" x2="70" y2="90" />
+                                  <line x1="730" y1="30" x2="730" y2="90" />
+                                  <path d="M75,40 L65,50 L75,60 L65,70 L75,80" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" fill="none" />
+                                  <path d="M725,40 L735,50 L725,60 L735,70 L725,80" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" fill="none" />
+                                </g>
+                              </svg>
+
+                              {/* اسم السورة */}
+                              <h2 className={`absolute inset-0 flex items-center justify-center font-amiri font-bold drop-shadow-md tracking-wider ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#2D2A26]'}`} style={{ fontSize: 'clamp(20px, 4vh, 36px)' }}>
+                                سُورَةُ {item.surahName.replace(/^سُورَةُ\s+/, '')}
+                              </h2>
+                            </div>
+                          </div>
+                        );
+                      }
+
+                      // تعريف المتغيرات المطلوبة
+                      const isFirstAyah = item.numberInSurah === 1;
+                      const isTawbah = item.surahNumber === 9;
+                      let displayBasmala = false;
+                      let ayahText = item.text;
+
+                      if (isFirstAyah && !isTawbah) {
+                        const cleanText = ayahText.replace(/^\ufeff/, '').trim();
+                        // البسملة دائماً تتكون من 4 كلمات مفصولة بمسافات
+                        // نبحث عن المسافة الرابعة لتحديد نهاية البسملة بدقة
+                        if (cleanText.startsWith('بِسْمِ')) {
+                          let spaceCount = 0;
+                          let basmalaEndIndex = -1;
+                          for (let i = 0; i < cleanText.length; i++) {
+                            if (cleanText[i] === ' ' && cleanText[i-1] !== ' ') {
+                              spaceCount++;
+                              if (spaceCount === 4) {
+                                basmalaEndIndex = i;
+                                break;
+                              }
+                            }
+                          }
+                          if (basmalaEndIndex > 0) {
+                            console.log('✅ Found Basmala in Surah', item.surahNumber);
+                            displayBasmala = true;
+                            ayahText = cleanText.substring(basmalaEndIndex).trim();
+                          }
+                        }
+                      }
+
+                      return (
+                        <React.Fragment key={`next-ayah-container-${item.surahNumber}-${item.numberInSurah}`}>
+                          {displayBasmala && (
+                            <div className={`text-center font-amiri my-3 w-full ${ayahTextColor}`} style={{ fontSize: 'clamp(14px, 2.4vh, 22px)' }}>
+                              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                            </div>
+                          )}
+                          {ayahText.length > 0 && (
+                            <span key={`next-ayah-${item.surahNumber}-${item.numberInSurah}`} className={`font-amiri ${ayahTextColor}`}>
+                              {ayahText}
+                              <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[0.6em] font-bold mx-0.5 ${isDarkMode ? 'bg-[#D4AF37]/40 text-[#D4AF37]' : 'bg-[#D4AF37]/25 text-[#8B7355]'}`}>
+                                {item.numberInSurah.toLocaleString('ar-EG')}
+                              </span>{' '}
+                            </span>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+             {/* رقم الصفحة التالي */}
+             {nextPageVerses.length > 0 && (
+              <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center">
+                <div className={`flex items-center justify-center ${textColor}`}>
+                  <button
+                    onClick={() => setShowJumpModal(true)}
+                    className={`relative flex items-center justify-center gap-2 px-6 py-2 font-cairo font-bold text-sm transition ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#8B7355]'}`}
+                  >
+                    <div className="absolute inset-0 bg-no-repeat bg-center bg-contain" style={{ backgroundImage: "url('/page-bg.svg')", filter: isDarkMode ? 'invert(85%) sepia(25%) saturate(1500%) hue-rotate(350deg)' : 'none' }}></div>
+                    <FaBookOpen className="relative z-10" />
+                    <span className="relative z-10">{(currentPage + 1).toString().padStart(3, '0')}</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </main>
 
       {/* عناصر التحكم بالتمرير التلقائي */}
-      <div className={`fixed bottom-20 right-6 md:right-10 z-[45] flex flex-col items-center gap-3 transition-all duration-300 ${showControls ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0 pointer-events-none'}`}>
+      <div className={`fixed bottom-6 right-6 md:right-10 z-[45] flex flex-col items-center gap-3 transition-all duration-300 ${showControls ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0 pointer-events-none'}`}>
         {/* مؤشر السرعة (يظهر فقط أثناء التمرير التلقائي) */}
         <div className={`transition-all duration-300 transform ${isAutoScrolling ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-4 opacity-0 scale-50 pointer-events-none'}`}>
           <button
             onClick={(e) => { e.stopPropagation(); setAutoScrollSpeed(prev => prev === 3 ? 1 : prev + 1); }}
-            className="w-10 h-10 rounded-full bg-[#D4AF37] text-white font-bold text-sm shadow-[0_2px_10px_rgba(212,175,55,0.4)] hover:bg-[#C5A028] transition-colors flex items-center justify-center font-cairo"
+            className="w-8 h-8 rounded-full bg-[#D4AF37] text-white font-bold text-xs shadow-[0_2px_10px_rgba(212,175,55,0.4)] hover:bg-[#C5A028] transition-colors flex items-center justify-center font-cairo"
             title="تغيير سرعة القراءة"
           >
             {autoScrollSpeed}
@@ -685,44 +927,25 @@ function MushafReader() {
         <button
           onClick={() => setIsAutoScrolling(!isAutoScrolling)}
           title={isAutoScrolling ? "إيقاف التمرير التلقائي" : "تمرير تلقائي"}
-          className={`p-3.5 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-300 ${isAutoScrolling
+          className={`p-2 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-300 ${isAutoScrolling
               ? 'bg-[#D4AF37] text-white shadow-[#D4AF37]/50'
               : `${isDarkMode ? 'bg-[#2a2a2a] text-[#A0917B]' : 'bg-[#FBF8F1] text-[#8B7355]'} border border-[#D4AF37]/50 hover:text-[#D4AF37] hover:scale-105`
             }`}
         >
-          <FaAngleDoubleDown size={22} className={isAutoScrolling ? "animate-bounce" : ""} />
+          <FaAngleDoubleDown size={16} className={isAutoScrolling ? "animate-bounce" : ""} />
         </button>
       </div>
 
-      {/* شريط سفلي للتنقل */}
-      <footer
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t ${footerBg} to-transparent transition-all duration-300 ${showControls ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full pointer-events-none'
-          }`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-center p-4 max-w-lg mx-auto">
-          {/* رقم الصفحة والجزء فقط */}
-          <div className={`flex items-center justify-center gap-4 ${textColor}`}>
-            <span className="font-cairo text-sm">الصفحة</span>
-            <button
-              onClick={() => setShowJumpModal(true)}
-              className={`px-6 py-2 ${cardBg} rounded-full shadow-md ${textColor} font-cairo font-bold hover:opacity-80 transition border ${isDarkMode ? 'border-[#D4AF37]/30' : 'border-[#D4AF37]/20'}`}
-            >
-              {currentPage}
-            </button>
-            <span className="font-cairo text-sm">•</span>
-            <span className="font-cairo text-sm">الجزء {currentJuz.toString().padStart(2, '0')}</span>
-          </div>
-        </div>
-      </footer>
+      {/* شريط سفلي للتنقل - تم إزالته */}
+      {/* <footer ... /> */}
 
       {/* مودال الانتقال لصفحة */}
       {showJumpModal && (
-        <div
+        <div 
           className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4"
           onClick={() => setShowJumpModal(false)}
         >
-          <div
+          <div 
             className={`${cardBg} rounded-2xl p-6 w-full max-w-sm shadow-xl`}
             onClick={(e) => e.stopPropagation()}
           >
@@ -776,11 +999,11 @@ function MushafReader() {
 
       {/* مودال قائمة السور */}
       {showSurahList && (
-        <div
+        <div 
           className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4"
           onClick={() => setShowSurahList(false)}
         >
-          <div
+          <div 
             className={`${cardBg} rounded-2xl w-full max-w-md max-h-[80vh] shadow-xl overflow-hidden flex flex-col`}
             onClick={(e) => e.stopPropagation()}
           >
