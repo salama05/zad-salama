@@ -212,6 +212,11 @@ const JUZ_PAGES = [
   { number: 30, page: 582 },
 ];
 
+// ارتفاع الشريط العلوي الثابت (بكسل) - لضمان عدم تداخل النص مع الترويسة
+const HEADER_HEIGHT_PX = 72;
+// المساحة المحجوزة لرقم الصفحة في الأسفل (بكسل)
+const PAGE_NUMBER_AREA_PX = 56;
+
 function MushafReader() {
   const navigate = useNavigate();
   const { currentPage, isLoading: bookmarkLoading, nextPage, prevPage, goToPage } = useMushafBookmark();
@@ -326,7 +331,7 @@ function MushafReader() {
         
         // عندما تصل الشاشة لارتفاع الشاشة (100vh)، انتقل للصفحة الموالية
         // الارتفاع التقريبي للشاشة بالبكسل
-        const screenHeight = window.innerHeight;
+        const screenHeight = window.visualViewport?.height || window.innerHeight;
         
         if (newOffset >= screenHeight && currentPage < 604) {
           nextPage();
@@ -468,7 +473,8 @@ function MushafReader() {
   return (
     <div
       ref={containerRef}
-      className={`h-screen w-screen flex flex-col select-none overflow-hidden ${bgColor}`}
+      className={`w-screen flex flex-col select-none overflow-hidden ${bgColor}`}
+      style={{ height: '100dvh' }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -549,9 +555,9 @@ function MushafReader() {
           }}
         >
           {/* الصفحة الحالية - النصف الأول */}
-          <div className="h-screen w-full flex-shrink-0 overflow-hidden flex flex-col justify-center pb-2 relative">
-            <div className="flex-1 overflow-hidden flex flex-col justify-center">
-              <div className="max-w-xl mx-auto w-full px-3 md:px-6 py-4">
+          <div className="w-full flex-shrink-0 overflow-hidden flex flex-col relative" style={{ height: '100dvh' }}>
+            <div className="flex-1 overflow-hidden flex flex-col justify-center" style={{ paddingTop: `${HEADER_HEIGHT_PX}px`, paddingBottom: `${PAGE_NUMBER_AREA_PX}px` }}>
+              <div className="max-w-xl mx-auto w-full px-3 md:px-6 py-2">
                 {pageVerses.length === 0 ? (
                   <div className={`text-center py-8 ${textColor}`}>
                     <p className="font-cairo">لا توجد آيات في هذه الصفحة</p>
@@ -728,9 +734,9 @@ function MushafReader() {
           </div>
 
           {/* الصفحة الموالية - النصف الثاني */}
-          <div className="h-screen w-full flex-shrink-0 overflow-hidden flex flex-col justify-center pb-2 relative">
-            <div className="flex-1 overflow-hidden flex flex-col justify-center">
-              <div className="max-w-xl mx-auto w-full px-3 md:px-6 py-4">
+          <div className="w-full flex-shrink-0 overflow-hidden flex flex-col relative" style={{ height: '100dvh' }}>
+            <div className="flex-1 overflow-hidden flex flex-col justify-center" style={{ paddingTop: `${HEADER_HEIGHT_PX}px`, paddingBottom: `${PAGE_NUMBER_AREA_PX}px` }}>
+              <div className="max-w-xl mx-auto w-full px-3 md:px-6 py-2">
                 {nextPageVerses.length === 0 ? (
                   <div className={`text-center py-8 ${textColor} opacity-50`}>
                     <p className="font-cairo">نهاية المصحف الشريف</p>
