@@ -1,8 +1,8 @@
 {
-  "iconSourcePath": "public/app-logo.svg",
+  "iconSourcePath": "public/logo.png.jpg",
   "iconPathIos": "ios/App/App/Assets.xcassets/AppIcon.appiconset",
   "iconPathAndroid": "android/app/src/main/res",
-  "splashSourcePath": "public/app-logo.svg",
+  "splashSourcePath": "public/logo.png.jpg",
   "splashPathIos": "ios/App/App/Assets.xcassets/Splash.imageset",
   "splashPathAndroid": "android/app/src/main/res",
   "splashBgColorLight": "#1A5F7A",
