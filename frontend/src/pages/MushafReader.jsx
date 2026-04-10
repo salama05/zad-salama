@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaHome, FaListUl, FaExpand, FaCompress, FaArrowRight, FaArrowLeft, FaMoon, FaSun, FaWifi, FaCheck, FaBookOpen, FaAngleDoubleDown } from 'react-icons/fa';
 import { useMushafBookmark } from '../hooks/useMushafBookmark';
 import { useMushafWird } from '../hooks/useMushafWird';
+import { App } from '@capacitor/app';
 
 // بيانات القرآن المحلية - سيتم تحميلها من الملف
 let cachedQuranData = null;
@@ -399,6 +400,29 @@ function MushafReader() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentPage, showJumpModal, showSurahList, isFullscreen]);
 
+  // التعامل مع زر الرجوع في Capacitor (Android back button)
+  useEffect(() => {
+    const handleBackButton = async () => {
+      // إذا كانت هناك صفحة سابقة في المصحف، الرجوع إليها
+      if (currentPage > 1) {
+        prevPage();
+      } else {
+        // إذا كنا على الصفحة الأولى، الذهاب للرئيسية
+        navigate('/home');
+      }
+    };
+
+    try {
+      const listener = App.addListener('backButton', handleBackButton);
+      return () => {
+        listener.then(l => l.remove());
+      };
+    } catch (error) {
+      // إذا كان التطبيق لا يعمل في Capacitor، لا تفعل شيء
+      console.log('Capacitor not available');
+    }
+  }, [currentPage, prevPage, navigate]);
+
   // تبديل ملء الشاشة
   const toggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) {
@@ -517,7 +541,6 @@ function MushafReader() {
             <button onClick={() => setIsDarkMode(!isDarkMode)} title="الوضع الليلي" className="p-1.5">{isDarkMode ? <FaSun size={12} /> : <FaMoon size={12} />}</button>
             <button onClick={() => navigate('/home')} title="الرئيسية" className="p-1.5"><FaHome size={12} /></button>
             <button onClick={() => setShowSurahList(true)} title="قائمة السور" className="p-1.5"><FaListUl size={12} /></button>
-            <button onClick={toggleFullscreen} title="ملء الشاشة" className="p-1.5">{isFullscreen ? <FaCompress size={12} /> : <FaExpand size={12} />}</button>
           </div>
 
           {/* اليسار: الجزء والحزب */}
@@ -549,9 +572,9 @@ function MushafReader() {
           }}
         >
           {/* الصفحة الحالية - النصف الأول */}
-          <div className="h-screen w-full flex-shrink-0 overflow-hidden flex flex-col justify-center pb-2 relative">
-            <div className="flex-1 overflow-hidden flex flex-col justify-center">
-              <div className="max-w-xl mx-auto w-full px-3 md:px-6 py-4">
+          <div className="h-screen w-full flex-shrink-0 flex flex-col justify-between relative">
+            <div className="flex-1 overflow-y-auto flex flex-col justify-center">
+              <div className="max-w-xl mx-auto w-full px-3 md:px-6 py-12">
                 {pageVerses.length === 0 ? (
                   <div className={`text-center py-8 ${textColor}`}>
                     <p className="font-cairo">لا توجد آيات في هذه الصفحة</p>
@@ -562,97 +585,9 @@ function MushafReader() {
                       if (item.type === 'surah-header') {
                         return (
                           <div key={`header-${item.surahNumber}`} className="my-6 relative w-full flex justify-center px-2">
-                            {/* برواز السورة الزخرفي الفاخر الإسلامي */}
-                            <div className="relative w-full max-w-3xl">
-                              <svg viewBox="0 0 800 120" preserveAspectRatio="none" className={`w-full ${isDarkMode ? 'drop-shadow' : 'drop-shadow-sm'}`} style={{ height: '100px' }}>
-                                <defs>
-                                  <pattern id="crosshatch" patternUnits="userSpaceOnUse" width="20" height="20">
-                                    <line x1="0" y1="0" x2="20" y2="20" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.3" />
-                                    <line x1="20" y1="0" x2="0" y2="20" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.3" />
-                                  </pattern>
-                                </defs>
-
-                                {/* الإطار الخارجي الرئيسي */}
-                                <rect x="20" y="15" width="760" height="90" fill="none" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="3" />
-                                <rect x="26" y="21" width="748" height="78" fill="none" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.6" />
-
-                                {/* الزوايا الزخرفية */}
-                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="2" fill="none">
-                                  {/* الزاوية العلوية اليسرى */}
-                                  <path d="M20,15 L35,15 M20,15 L20,30" />
-                                  <circle cx="20" cy="15" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
-                                  
-                                  {/* الزاوية العلوية اليمنى */}
-                                  <path d="M780,15 L765,15 M780,15 L780,30" />
-                                  <circle cx="780" cy="15" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
-                                  
-                                  {/* الزاوية السفلية اليسرى */}
-                                  <path d="M20,105 L35,105 M20,105 L20,90" />
-                                  <circle cx="20" cy="105" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
-                                  
-                                  {/* الزاوية السفلية اليمنى */}
-                                  <path d="M780,105 L765,105 M780,105 L780,90" />
-                                  <circle cx="780" cy="105" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
-                                </g>
-
-                                {/* النقوش الزخرفية المركزية */}
-                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1.5" fill="none" opacity="0.8">
-                                  {/* يسار */}
-                                  <circle cx="45" cy="60" r="8" />
-                                  <path d="M40,60 L50,60 M45,55 L45,65" />
-                                  <path d="M38,52 L52,68 M52,52 L38,68" />
-                                  
-                                  {/* يمين */}
-                                  <circle cx="755" cy="60" r="8" />
-                                  <path d="M750,60 L760,60 M755,55 L755,65" />
-                                  <path d="M748,52 L762,68 M762,52 L748,68" />
-                                </g>
-
-                                {/* الزخرفة الوسطى العلوية */}
-                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1.5" fill="none" opacity="0.7">
-                                  <circle cx="100" cy="20" r="6" />
-                                  <circle cx="150" cy="20" r="6" />
-                                  <circle cx="200" cy="20" r="6" />
-                                  <circle cx="250" cy="20" r="6" />
-                                  <circle cx="300" cy="20" r="6" />
-                                  <circle cx="350" cy="20" r="6" />
-                                  <circle cx="400" cy="20" r="6" />
-                                  <circle cx="450" cy="20" r="6" />
-                                  <circle cx="500" cy="20" r="6" />
-                                  <circle cx="550" cy="20" r="6" />
-                                  <circle cx="600" cy="20" r="6" />
-                                  <circle cx="650" cy="20" r="6" />
-                                  <circle cx="700" cy="20" r="6" />
-                                </g>
-
-                                {/* الزخرفة الوسطى السفلية */}
-                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1.5" fill="none" opacity="0.7">
-                                  <circle cx="100" cy="100" r="6" />
-                                  <circle cx="150" cy="100" r="6" />
-                                  <circle cx="200" cy="100" r="6" />
-                                  <circle cx="250" cy="100" r="6" />
-                                  <circle cx="300" cy="100" r="6" />
-                                  <circle cx="350" cy="100" r="6" />
-                                  <circle cx="400" cy="100" r="6" />
-                                  <circle cx="450" cy="100" r="6" />
-                                  <circle cx="500" cy="100" r="6" />
-                                  <circle cx="550" cy="100" r="6" />
-                                  <circle cx="600" cy="100" r="6" />
-                                  <circle cx="650" cy="100" r="6" />
-                                  <circle cx="700" cy="100" r="6" />
-                                </g>
-
-                                {/* الخطوط الزخرفية الجانبية */}
-                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.5">
-                                  <line x1="70" y1="30" x2="70" y2="90" />
-                                  <line x1="730" y1="30" x2="730" y2="90" />
-                                  <path d="M75,40 L65,50 L75,60 L65,70 L75,80" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" fill="none" />
-                                  <path d="M725,40 L735,50 L725,60 L735,70 L725,80" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" fill="none" />
-                                </g>
-                              </svg>
-
-                              {/* اسم السورة */}
-                              <h2 className={`absolute inset-0 flex items-center justify-center font-amiri font-bold drop-shadow-md tracking-wider ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#2D2A26]'}`} style={{ fontSize: 'clamp(20px, 4vh, 36px)' }}>
+                            {/* برواز السورة كبسولة ناعمة */}
+                            <div className={`px-8 py-3 rounded-full ${isDarkMode ? 'bg-[#2a2a2a]/80 border border-[#D4AF37]/40' : 'bg-[#FBF8F1]/80 border border-[#8B7355]/40'} shadow-md backdrop-blur-sm`}>
+                              <h2 className={`font-amiri font-bold tracking-wider ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#2D2A26]'}`} style={{ fontSize: 'clamp(16px, 3vh, 24px)' }}>
                                 سُورَةُ {item.surahName.replace(/^سُورَةُ\s+/, '')}
                               </h2>
                             </div>
@@ -741,97 +676,9 @@ function MushafReader() {
                       if (item.type === 'surah-header') {
                         return (
                           <div key={`next-header-${item.surahNumber}`} className="my-6 relative w-full flex justify-center px-2">
-                            {/* برواز السورة الزخرفي الفاخر الإسلامي */}
-                            <div className="relative w-full max-w-3xl">
-                              <svg viewBox="0 0 800 120" preserveAspectRatio="none" className={`w-full ${isDarkMode ? 'drop-shadow' : 'drop-shadow-sm'}`} style={{ height: '100px' }}>
-                                <defs>
-                                  <pattern id="crosshatch" patternUnits="userSpaceOnUse" width="20" height="20">
-                                    <line x1="0" y1="0" x2="20" y2="20" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.3" />
-                                    <line x1="20" y1="0" x2="0" y2="20" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.3" />
-                                  </pattern>
-                                </defs>
-
-                                {/* الإطار الخارجي الرئيسي */}
-                                <rect x="20" y="15" width="760" height="90" fill="none" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="3" />
-                                <rect x="26" y="21" width="748" height="78" fill="none" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.6" />
-
-                                {/* الزوايا الزخرفية */}
-                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="2" fill="none">
-                                  {/* الزاوية العلوية اليسرى */}
-                                  <path d="M20,15 L35,15 M20,15 L20,30" />
-                                  <circle cx="20" cy="15" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
-                                  
-                                  {/* الزاوية العلوية اليمنى */}
-                                  <path d="M780,15 L765,15 M780,15 L780,30" />
-                                  <circle cx="780" cy="15" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
-                                  
-                                  {/* الزاوية السفلية اليسرى */}
-                                  <path d="M20,105 L35,105 M20,105 L20,90" />
-                                  <circle cx="20" cy="105" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
-                                  
-                                  {/* الزاوية السفلية اليمنى */}
-                                  <path d="M780,105 L765,105 M780,105 L780,90" />
-                                  <circle cx="780" cy="105" r="4" fill={isDarkMode ? '#D4AF37' : '#A68A5E'} />
-                                </g>
-
-                                {/* النقوش الزخرفية المركزية */}
-                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1.5" fill="none" opacity="0.8">
-                                  {/* يسار */}
-                                  <circle cx="45" cy="60" r="8" />
-                                  <path d="M40,60 L50,60 M45,55 L45,65" />
-                                  <path d="M38,52 L52,68 M52,52 L38,68" />
-                                  
-                                  {/* يمين */}
-                                  <circle cx="755" cy="60" r="8" />
-                                  <path d="M750,60 L760,60 M755,55 L755,65" />
-                                  <path d="M748,52 L762,68 M762,52 L748,68" />
-                                </g>
-
-                                {/* الزخرفة الوسطى العلوية */}
-                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1.5" fill="none" opacity="0.7">
-                                  <circle cx="100" cy="20" r="6" />
-                                  <circle cx="150" cy="20" r="6" />
-                                  <circle cx="200" cy="20" r="6" />
-                                  <circle cx="250" cy="20" r="6" />
-                                  <circle cx="300" cy="20" r="6" />
-                                  <circle cx="350" cy="20" r="6" />
-                                  <circle cx="400" cy="20" r="6" />
-                                  <circle cx="450" cy="20" r="6" />
-                                  <circle cx="500" cy="20" r="6" />
-                                  <circle cx="550" cy="20" r="6" />
-                                  <circle cx="600" cy="20" r="6" />
-                                  <circle cx="650" cy="20" r="6" />
-                                  <circle cx="700" cy="20" r="6" />
-                                </g>
-
-                                {/* الزخرفة الوسطى السفلية */}
-                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1.5" fill="none" opacity="0.7">
-                                  <circle cx="100" cy="100" r="6" />
-                                  <circle cx="150" cy="100" r="6" />
-                                  <circle cx="200" cy="100" r="6" />
-                                  <circle cx="250" cy="100" r="6" />
-                                  <circle cx="300" cy="100" r="6" />
-                                  <circle cx="350" cy="100" r="6" />
-                                  <circle cx="400" cy="100" r="6" />
-                                  <circle cx="450" cy="100" r="6" />
-                                  <circle cx="500" cy="100" r="6" />
-                                  <circle cx="550" cy="100" r="6" />
-                                  <circle cx="600" cy="100" r="6" />
-                                  <circle cx="650" cy="100" r="6" />
-                                  <circle cx="700" cy="100" r="6" />
-                                </g>
-
-                                {/* الخطوط الزخرفية الجانبية */}
-                                <g stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" opacity="0.5">
-                                  <line x1="70" y1="30" x2="70" y2="90" />
-                                  <line x1="730" y1="30" x2="730" y2="90" />
-                                  <path d="M75,40 L65,50 L75,60 L65,70 L75,80" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" fill="none" />
-                                  <path d="M725,40 L735,50 L725,60 L735,70 L725,80" stroke={isDarkMode ? '#D4AF37' : '#A68A5E'} strokeWidth="1" fill="none" />
-                                </g>
-                              </svg>
-
-                              {/* اسم السورة */}
-                              <h2 className={`absolute inset-0 flex items-center justify-center font-amiri font-bold drop-shadow-md tracking-wider ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#2D2A26]'}`} style={{ fontSize: 'clamp(20px, 4vh, 36px)' }}>
+                            {/* برواز السورة كبسولة ناعمة */}
+                            <div className={`px-8 py-3 rounded-full ${isDarkMode ? 'bg-[#2a2a2a]/80 border border-[#D4AF37]/40' : 'bg-[#FBF8F1]/80 border border-[#8B7355]/40'} shadow-md backdrop-blur-sm`}>
+                              <h2 className={`font-amiri font-bold tracking-wider ${isDarkMode ? 'text-[#D4AF37]' : 'text-[#2D2A26]'}`} style={{ fontSize: 'clamp(16px, 3vh, 24px)' }}>
                                 سُورَةُ {item.surahName.replace(/^سُورَةُ\s+/, '')}
                               </h2>
                             </div>
