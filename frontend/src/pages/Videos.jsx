@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import * as Icons from 'react-icons/fa';
 import { videos } from '../data/videos';
@@ -7,9 +7,9 @@ function Videos() {
   return (
     <div className='page-enter-active pb-20'>
       <div className='flex items-center mb-8 relative border-b-2 border-zad-border/20 pb-4'>
-        <button onClick={() => window.history.back()} className='absolute right-0 text-zad-border hover:text-[#C5A028] transition-colors p-2 z-10 cursor-pointer'>
+        <Link to="/home" className='absolute right-0 text-zad-border hover:text-[#C5A028] transition-colors p-2 z-10 cursor-pointer'>
            <Icons.FaArrowRight size={24} />
-        </button>
+        </Link>
         <div className='text-center w-full'>
           <h2 className='text-3xl font-amiri font-bold text-zad-border drop-shadow-sm'>مرئيات</h2>
           <p className='text-sm font-cairo opacity-60 mt-2'>مواعظ ومقاطع مختارة</p>
@@ -31,7 +31,7 @@ function Videos() {
                   allowFullScreen
                 ></iframe>
               ) : (
-                <video 
+                <video
                   className='absolute top-0 left-0 w-full h-full object-cover bg-black'
                   controls
                   src={item.videoUrl}
@@ -42,7 +42,7 @@ function Videos() {
               <h3 className='font-amiri font-bold text-xl text-zad-text mb-3 leading-relaxed'>{item.title}</h3>
               <div className='flex items-center justify-start text-sm font-cairo text-zad-text/70'>
                 <div className='flex items-center gap-2'>
-                  <Icons.FaUserTie size={12} className='text-zad-border' /> 
+                  <Icons.FaUserTie size={12} className='text-zad-border' />
                   <span>{item.speaker}</span>
                 </div>
               </div>

@@ -1,12 +1,11 @@
 {
-  "iconSourcePath": "public/logo.png.jpg",
+  "iconSourcePath": "resources/icon.png",
   "iconPathIos": "ios/App/App/Assets.xcassets/AppIcon.appiconset",
   "iconPathAndroid": "android/app/src/main/res",
-  "splashSourcePath": "public/logo.png.jpg",
+  "splashSourcePath": "resources/icon.png",
   "splashPathIos": "ios/App/App/Assets.xcassets/Splash.imageset",
   "splashPathAndroid": "android/app/src/main/res",
-  "splashBgColorLight": "#1A5F7A",
-  "splashBgColorDark": "#1A5F7A",
-  "logoPath": "resources/logo.png",
-  "platforms": ["android", "ios"]
+  "splashBgColorLight": "#ffffff",
+  "splashBgColorDark": "#ffffff",
+  "platforms": ["android", "ios", "pwa"]
 }

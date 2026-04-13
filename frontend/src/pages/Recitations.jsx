@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import * as Icons from 'react-icons/fa';
 import { recitations } from '../data/recitations';
@@ -7,9 +7,9 @@ function Recitations() {
   return (
     <div className='page-enter-active pb-20'>
       <div className='flex items-center mb-8 relative border-b-2 border-zad-border/20 pb-4'>
-        <button onClick={() => window.history.back()} className='absolute right-0 text-zad-border hover:text-[#C5A028] transition-colors p-2 z-10 cursor-pointer'>
+        <Link to="/home" className='absolute right-0 text-zad-border hover:text-[#C5A028] transition-colors p-2 z-10 cursor-pointer'>
            <Icons.FaArrowRight size={24} />
-        </button>
+        </Link>
         <div className='text-center w-full'>
           <h2 className='text-3xl font-amiri font-bold text-zad-border drop-shadow-sm'>تلاوات مختارة</h2>
           <p className='text-sm font-cairo opacity-60 mt-2'>باقة من التلاوات الخاشعة</p>
@@ -31,7 +31,7 @@ function Recitations() {
                   allowFullScreen
                 ></iframe>
               ) : (
-                <video 
+                <video
                   className='absolute top-0 left-0 w-full h-full object-cover bg-black'
                   controls
                   src={item.videoUrl}
@@ -40,14 +40,10 @@ function Recitations() {
             </div>
             <div className='p-5 text-right'>
               <h3 className='font-amiri font-bold text-xl text-zad-text mb-3 leading-relaxed'>{item.title}</h3>
-              <div className='flex items-center justify-between text-sm font-cairo text-zad-text/70'>
+              <div className='flex items-center justify-start text-sm font-cairo text-zad-text/70'>
                 <div className='flex items-center gap-2'>
-                  <Icons.FaUser size={12} className='text-zad-border' /> 
+                  <Icons.FaUserTie size={12} className='text-zad-border' />
                   <span>{item.reader}</span>
-                </div>
-                <div className='flex items-center gap-2 bg-zad-border/10 px-3 py-1 rounded-full'>
-                  <Icons.FaBookOpen size={12} className='text-zad-border' />
-                  <span className='font-bold text-zad-border'>{item.surah}</span>
                 </div>
               </div>
             </div>

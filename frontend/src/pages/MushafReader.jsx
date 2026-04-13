@@ -400,29 +400,6 @@ function MushafReader() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentPage, showJumpModal, showSurahList, isFullscreen]);
 
-  // التعامل مع زر الرجوع في Capacitor (Android back button)
-  useEffect(() => {
-    const handleBackButton = async () => {
-      // إذا كانت هناك صفحة سابقة في المصحف، الرجوع إليها
-      if (currentPage > 1) {
-        prevPage();
-      } else {
-        // إذا كنا على الصفحة الأولى، الذهاب للرئيسية
-        navigate('/home');
-      }
-    };
-
-    try {
-      const listener = App.addListener('backButton', handleBackButton);
-      return () => {
-        listener.then(l => l.remove());
-      };
-    } catch (error) {
-      // إذا كان التطبيق لا يعمل في Capacitor، لا تفعل شيء
-      console.log('Capacitor not available');
-    }
-  }, [currentPage, prevPage, navigate]);
-
   // تبديل ملء الشاشة
   const toggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) {
@@ -498,13 +475,7 @@ function MushafReader() {
       onTouchEnd={handleTouchEnd}
       onClick={(e) => e.stopPropagation()}
     >
-      {/* مؤشر العمل بدون إنترنت */}
-      {isOffline && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[60] bg-green-600 text-white px-4 py-2 rounded-full text-xs font-cairo flex items-center gap-2 shadow-lg">
-          <FaWifi className="opacity-50" />
-          يعمل بدون إنترنت
-        </div>
-      )}
+      {/* تم إزالة مؤشر العمل بدون إنترنت بناءً على طلب المستخدم لأنه يعيق القراءة */}
 
       {/* شريط علوي زخرفي فاخر (محاكاة للصورة) */}
       <header

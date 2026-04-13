@@ -1,0 +1,381 @@
+/**
+ * أنماط CSS متقدمة للمصحف الشريف
+ */
+
+/* === Color Variables === */
+:root {
+  --mushaf-bg: #FBF8F1;
+  --mushaf-card: #FFFFFF;
+  --mushaf-text: #2C1810;
+  --mushaf-gold: #D4AF37;
+  --mushaf-gold-light: #C5A028;
+  --mushaf-brown: #8B7355;
+  --mushaf-brown-light: #E8DCC4;
+  --mushaf-border: #D4AF37;
+
+  --mushaf-dark-bg: #1A1410;
+  --mushaf-dark-card: #2C2420;
+  --mushaf-dark-text: #E8DCC4;
+  --mushaf-dark-secondary: #A0917B;
+}
+
+/* === Enhanced Mushaf Page === */
+.enhanced-mushaf-page {
+  background-color: var(--mushaf-bg);
+  color: var(--mushaf-text);
+  font-family: 'Traditional Arabic', 'Droid Arabic Naskh', serif;
+  direction: rtl;
+  transition: all 0.3s ease;
+}
+
+.enhanced-mushaf-page.dark-mode {
+  background-color: var(--mushaf-dark-bg);
+  color: var(--mushaf-dark-text);
+}
+
+.mushaf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 2px solid var(--mushaf-border);
+  direction: rtl;
+  text-align: right;
+}
+
+.mushaf-header-text {
+  font-weight: bold;
+  font-size: 0.875rem;
+  color: var(--mushaf-brown);
+}
+
+.mushaf-header-page {
+  color: var(--mushaf-gold);
+  font-weight: bold;
+  font-size: 0.75rem;
+}
+
+/* === Surah Header === */
+.surah-header {
+  text-align: center;
+  padding: 1.5rem 0;
+  margin: 2rem 0;
+  border-top: 2px solid var(--mushaf-border);
+  border-bottom: 2px solid var(--mushaf-border);
+}
+
+.surah-name {
+  color: var(--mushaf-brown);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.surah-type {
+  color: var(--mushaf-brown);
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* === Verses === */
+.verse-container {
+  margin: 1.5rem 0;
+  line-height: 1.8;
+  color: var(--mushaf-text);
+  direction: rtl;
+  text-align: right;
+}
+
+.verse-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.verse-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  background-color: var(--mushaf-gold);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.verse-content {
+  flex: 1;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  line-height: 1.8;
+}
+
+/* === Decorative Elements === */
+.decorative-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  opacity: 0.6;
+}
+
+.decorative-line.top {
+  margin-bottom: 2rem;
+}
+
+.decorative-line.bottom {
+  margin-top: 2rem;
+}
+
+.decorative-symbol {
+  color: var(--mushaf-gold);
+  font-size: 1.5rem;
+}
+
+.line {
+  flex: 1;
+  border-top: 2px solid var(--mushaf-gold);
+}
+
+/* === Premium Viewer === */
+.premium-mushaf-viewer {
+  background-color: var(--mushaf-bg);
+  color: var(--mushaf-text);
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
+  direction: rtl;
+}
+
+.premium-mushaf-viewer.dark-mode {
+  background-color: var(--mushaf-dark-bg);
+  color: var(--mushaf-dark-text);
+}
+
+.mushaf-card {
+  background-color: var(--mushaf-card);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.premium-mushaf-viewer.dark-mode .mushaf-card {
+  background-color: var(--mushaf-dark-card);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.page-content {
+  padding: 1.5rem;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  direction: rtl;
+}
+
+.page-image {
+  max-width: 100%;
+  max-height: 600px;
+  object-fit: contain;
+  border-radius: 0.25rem;
+  transition: opacity 0.3s ease;
+}
+
+.page-image.loading {
+  opacity: 0.3;
+}
+
+.page-image.loaded {
+  opacity: 1;
+}
+
+/* === Navigation === */
+.mushaf-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-top: 2px solid var(--mushaf-border);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.nav-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--mushaf-gold);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  font-family: inherit;
+}
+
+.nav-button:hover:not(:disabled) {
+  background-color: var(--mushaf-gold-light);
+}
+
+.nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-input {
+  width: 80px;
+  padding: 0.5rem;
+  text-align: center;
+  border: 2px solid var(--mushaf-border);
+  border-radius: 0.5rem;
+  background-color: var(--mushaf-bg);
+  color: var(--mushaf-text);
+  font-weight: bold;
+  font-family: inherit;
+}
+
+.page-input:focus {
+  outline: none;
+  border-color: var(--mushaf-gold-light);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+/* === Dark Mode === */
+.dark-mode {
+  --mushaf-bg: var(--mushaf-dark-bg);
+  --mushaf-card: var(--mushaf-dark-card);
+  --mushaf-text: var(--mushaf-dark-text);
+  --mushaf-brown: var(--mushaf-dark-secondary);
+}
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+  .mushaf-header {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  .surah-name {
+    font-size: 1.2rem;
+  }
+
+  .verse-content {
+    font-size: 1rem;
+  }
+
+  .page-content {
+    padding: 1rem;
+    min-height: 400px;
+  }
+
+  .page-image {
+    max-height: 400px;
+  }
+
+  .mushaf-nav {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .nav-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mushaf-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .surah-name {
+    font-size: 1rem;
+  }
+
+  .verse-text {
+    gap: 0.5rem;
+  }
+
+  .verse-content {
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+  }
+
+  .page-content {
+    padding: 0.75rem;
+    min-height: 300px;
+  }
+
+  .page-image {
+    max-height: 300px;
+  }
+
+  .mushaf-nav {
+    justify-content: center;
+  }
+
+  .nav-button {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .page-input {
+    width: 60px;
+    font-size: 0.875rem;
+  }
+}
+
+/* === Animation === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.enhanced-mushaf-page {
+  animation: fadeIn 0.3s ease;
+}
+
+.page-image.loaded {
+  animation: fadeIn 0.3s ease;
+}
+
+/* === Print Style === */
+@media print {
+  .mushaf-header,
+  .mushaf-nav,
+  .nav-button {
+    display: none !important;
+  }
+
+  .enhanced-mushaf-page,
+  .mushaf-card,
+  .page-content {
+    box-shadow: none !important;
+    background-color: white !important;
+    color: black !important;
+  }
+}

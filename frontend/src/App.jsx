@@ -1,5 +1,5 @@
-import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 import { useAppContext } from './context/AppContext';
 import { App as CapacitorApp } from '@capacitor/app';
 
@@ -14,34 +14,82 @@ import Recitations from './pages/Recitations';
 import Videos from './pages/Videos';
 import MushafIndex from './pages/MushafIndex';
 import MushafReader from './pages/MushafReader';
+import AdhanPlayer from './components/AdhanPlayer';
 
 function App() {
   const { theme } = useAppContext();
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
+  const locationRef = useRef(location.pathname);
+  let lastTimeBackPress = useRef(0);
 
+  // Update ref when location changes
   useEffect(() => {
-    let activeListener = null;
+    locationRef.current = location.pathname;
+  }, [location.pathname]);
 
-    const setupBackButton = async () => {
-      activeListener = await CapacitorApp.addListener('backButton', () => {
-        const path = location.pathname;
-        if (path === '/home' || path === '/onboarding') {
+  // Handle hardware back button
+  useEffect(() => {
+    const timePeriodToExit = 2000;
+    
+    const showToast = (message) => {
+      const existingToast = document.getElementById('custom-toast');
+      if (existingToast) return;
+
+      const toast = document.createElement('div');
+      toast.id = 'custom-toast';
+      toast.innerText = message;
+      toast.style.position = 'fixed';
+      toast.style.bottom = '80px';
+      toast.style.left = '50%';
+      toast.style.transform = 'translateX(-50%)';
+      toast.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+      toast.style.color = '#fff';
+      toast.style.padding = '10px 20px';
+      toast.style.borderRadius = '25px';
+      toast.style.zIndex = '10000';
+      toast.style.fontSize = '14px';
+      toast.style.transition = 'opacity 0.3s ease-in-out';
+      toast.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+      
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+          if (document.body.contains(toast)) {
+            document.body.removeChild(toast);
+          }
+        }, 300);
+      }, 2000);
+    };
+
+    CapacitorApp.addListener('backButton', ({ canGoBack }) => {
+      const currentPath = locationRef.current;
+      
+      if (currentPath === '/home' || currentPath === '/onboarding' || currentPath === '/') {
+        const currentTime = new Date().getTime();
+        
+        if (currentTime - lastTimeBackPress.current < timePeriodToExit) {
           CapacitorApp.exitApp();
         } else {
-          navigate(-1);
+          lastTimeBackPress.current = currentTime;
+          showToast('اضغط مرة أخرى للخروج من التطبيق');
         }
-      });
-    };
-
-    setupBackButton();
+      } else {
+        // Not on home, navigate back
+        if (window.history.length > 1 || canGoBack) {
+          navigate(-1);
+        } else {
+          navigate('/home', { replace: true });
+        }
+      }
+    });
 
     return () => {
-      if (activeListener) {
-        activeListener.remove();
-      }
+      CapacitorApp.removeAllListeners('backButton');
     };
-  }, [location.pathname, navigate]);
+  }, [navigate]);
 
   // Helper to resolve CSS classes for theme
   const getThemeClasses = () => {
@@ -56,6 +104,7 @@ function App() {
 
   return (
     <div className={`min-h-screen w-full font-cairo transition-colors duration-300 ${getThemeClasses()}`}>
+      <AdhanPlayer />
       {/* Decorative top border can be injected here for global layout, or in individual pages */}
       
       <main className="max-w-4xl mx-auto px-4 py-8 h-full">
