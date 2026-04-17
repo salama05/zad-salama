@@ -297,10 +297,15 @@ function MushafIndex() {
                   <div className="w-12 h-12 rounded-full bg-[#D4AF37]/10 flex items-center justify-center">
                     <span className="font-cairo font-bold text-[#D4AF37]">{surah.number}</span>
                   </div>
-                  <div className="text-right">
-                    <h3 className="font-amiri text-xl text-[#8B7355]">{surah.name}</h3>
+                  <div className="text-right" dir="rtl">
+                    <div className="flex items-center justify-start gap-2 mb-1">
+                      <h3 className="font-amiri text-xl text-[#8B7355]">{surah.name}</h3>
+                      <span className="text-[10px] font-cairo px-2 py-0.5 bg-[#D4AF37]/10 text-[#8B7355] rounded border border-[#D4AF37]/20">
+                        {surah.type}
+                      </span>
+                    </div>
                     <p className="font-cairo text-xs text-[#A0917B]">
-                      {surah.englishName} • {surah.verses} آية • {surah.type}
+                      {surah.englishName} • {surah.verses} آية
                     </p>
                   </div>
                 </div>

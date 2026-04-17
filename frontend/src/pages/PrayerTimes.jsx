@@ -7,6 +7,9 @@ import { Country, State } from 'country-state-city';
 
 import ARAB_REGIONS from '../data/arab_regions.json';
 
+import { registerPlugin } from '@capacitor/core';
+const BatteryAlarm = registerPlugin('BatteryAlarm');
+
 const ADHANS = [
   { id: 'makkah', name: 'أذان مكة المكرمة', url: '/audio/makkah.mp3.mp3', soundFile: 'makkah.mp3.mp3' },
   { id: 'madinah', name: 'أذان المدينة المنورة', url: '/audio/madinah.mp3.mp3', soundFile: 'madinah.mp3.mp3' },
@@ -197,21 +200,23 @@ const ADHANS = [
       console.warn('Native geolocation failed, attempting IP fallback', err);
       // 3. Fallback: الاعتماد على خدمة IP مجانية أخرى في حال فشل الخدمة الأولى
       try {
-        const ipRes = await axios.get('https://ipapi.co/json/');
-        if (ipRes.data && ipRes.data.latitude && ipRes.data.longitude) {
-          fetchTimesByCoords(ipRes.data.latitude, ipRes.data.longitude);
+        const ipRes = await axios.get('https://ipinfo.io/json');
+        if (ipRes.data && ipRes.data.loc) {
+          const [lat, lng] = ipRes.data.loc.split(',');
+          fetchTimesByCoords(parseFloat(lat), parseFloat(lng));
         } else {
-          throw new Error('IPAPI failed');
+          throw new Error('IPINFO failed');
         }
       } catch (ipErr) {
         try {
           // الخيار الاحتياطي الثاني
-          const ipInfo = await axios.get('https://ipinfo.io/json');
-          if (ipInfo.data && ipInfo.data.loc) {
-            const [lat, lng] = ipInfo.data.loc.split(',');
-            fetchTimesByCoords(parseFloat(lat), parseFloat(lng));
+          const ipInfo = await axios.get('https://api.ipify.org?format=json');
+          if (ipInfo.data && ipInfo.data.ip) {
+            // ipify only gives IP, if we reach here we might just fail gracefully or use default
+            setError('فشل تحديد الموقع التلقائي. يرجى استخدام البحث اليدوي.');
+            setLoading(false);
           } else {
-            throw new Error('IPINFO failed');
+            throw new Error('Fallback failed');
           }
         } catch (ipInfoErr) {
           setError('لم نتمكن من تحديد موقعك. يرجى تفعيل مفتاح الـ GPS في الهاتف والمحاولة، أو استخدم البحث اليدوي.');
@@ -512,7 +517,22 @@ const ADHANS = [
                 type="checkbox" 
                 id="adhanToggle" 
                 checked={adhanEnabled}
-                onChange={() => setAdhanEnabled(!adhanEnabled)}
+                onChange={async () => {
+                  const newVal = !adhanEnabled;
+                  setAdhanEnabled(!adhanEnabled);
+                  if (newVal) {
+                    try {
+                      if (BatteryAlarm.requestExactAlarm) {
+                        await BatteryAlarm.requestExactAlarm();
+                      }
+                      if (BatteryAlarm.requestBatteryOptimization) {
+                        await BatteryAlarm.requestBatteryOptimization();
+                      }
+                    } catch (e) {
+                      console.warn('Failed to ask battery/alarm permission', e);
+                    }
+                  }
+                }}
                 className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
                 style={{ 
                   right: adhanEnabled ? '1.5rem' : '0', 
@@ -583,8 +603,7 @@ const ADHANS = [
       </div>
       
       {/* Hidden Audio Element */}
-      <audio 
-        ref={audioRef} 
+      <audio         key={selectedAdhan}        ref={audioRef} 
         src={selectedAdhan} 
         preload="auto"
         onEnded={() => setIsPreviewing(false)}

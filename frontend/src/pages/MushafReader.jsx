@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { FaHome, FaListUl, FaExpand, FaCompress, FaArrowRight, FaArrowLeft, FaMoon, FaSun, FaWifi, FaCheck, FaBookOpen, FaAngleDoubleDown } from 'react-icons/fa';
 import { useMushafBookmark } from '../hooks/useMushafBookmark';
 import { useMushafWird } from '../hooks/useMushafWird';
-import { App } from '@capacitor/app';
+import { KeepAwake } from '@capacitor-community/keep-awake';
+import { useBackNavigation } from '../hooks/useBackNavigation';
 
 // بيانات القرآن المحلية - سيتم تحميلها من الملف
 let cachedQuranData = null;
@@ -216,6 +217,10 @@ const JUZ_PAGES = [
 function MushafReader() {
   const navigate = useNavigate();
   const { currentPage, isLoading: bookmarkLoading, nextPage, prevPage, goToPage } = useMushafBookmark();
+  
+  // Handle HW back button
+  useBackNavigation('/mushaf-index');
+
   const { trackPageRead, wirdSettings, wirdProgress } = useMushafWird();
 
   // حالات البيانات
@@ -245,6 +250,7 @@ function MushafReader() {
   const containerRef = useRef(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+  const wakeLockRef = useRef(null);
 
   // تحميل بيانات القرآن
   useEffect(() => {
@@ -301,6 +307,58 @@ function MushafReader() {
   useEffect(() => {
     localStorage.setItem('mushaf-font-size', fontSize.toString());
   }, [fontSize]);
+
+  // إبقاء الشاشة مضاءة طوال القراءة داخل المصحف
+  useEffect(() => {
+    let isMounted = true;
+
+    const requestWakeLock = async () => {
+      try {
+        await KeepAwake.keepAwake();
+      } catch (error) {
+        try {
+          if ('wakeLock' in navigator && !wakeLockRef.current) {
+            wakeLockRef.current = await navigator.wakeLock.request('screen');
+          }
+        } catch (fallbackError) {
+          console.error('Wake lock not available:', fallbackError);
+        }
+      }
+    };
+
+    const releaseWakeLock = async () => {
+      try {
+        await KeepAwake.allowSleep();
+      } catch (error) {
+        // fallback handled below
+      }
+
+      try {
+        if (wakeLockRef.current) {
+          await wakeLockRef.current.release();
+          wakeLockRef.current = null;
+        }
+      } catch (fallbackError) {
+        // ignore release errors
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (!isMounted) return;
+      if (document.visibilityState === 'visible') {
+        requestWakeLock();
+      }
+    };
+
+    requestWakeLock();
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      isMounted = false;
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      releaseWakeLock();
+    };
+  }, []);
 
   // إخفاء/إظهار أدوات التحكم
   const toggleControls = () => setShowControls(!showControls);
@@ -363,12 +421,10 @@ function MushafReader() {
 
     if (Math.abs(diff) > threshold) {
       if (diff > 0) {
-        // سحب لليسار
-        prevPage();
-      } else {
-        // سحب لليمين
-        nextPage();
-      }
+          prevPage();
+        } else {
+          nextPage();
+        }
     }
   };
 
@@ -379,11 +435,11 @@ function MushafReader() {
 
       switch (e.key) {
         case 'ArrowLeft':
-          prevPage();
-          break;
-        case 'ArrowRight':
-          nextPage();
-          break;
+            prevPage();
+            break;
+          case 'ArrowRight':
+            nextPage();
+            break;
         case 'Home':
           goToPage(1);
           break;

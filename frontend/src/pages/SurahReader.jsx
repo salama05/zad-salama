@@ -2,11 +2,22 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'react-icons/fa';
+import { useBackNavigation } from '../hooks/useBackNavigation';
 
 function SurahReader() {
   const [surahs, setSurahs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedMushaf, setSelectedMushaf] = useState(null);
+  const navigate = useNavigate();
+
+  // Handle hardware back button
+  useBackNavigation(() => {
+    if (selectedMushaf) {
+      setSelectedMushaf(null);
+    } else {
+      navigate('/home');
+    }
+  });
 
   const mushafs = [
     { id: 'hafs', name: 'حفص عن عاصم' },
@@ -102,7 +113,12 @@ function SurahReader() {
                 <span className="font-cairo font-bold text-sm z-10">{surah.number}</span>
               </div>
               <div className="text-right">
-                <h3 className="font-amiri font-bold text-xl">{surah.name}</h3>
+                <div className="flex items-center justify-start gap-2 mb-1">
+                  <h3 className="font-amiri font-bold text-xl">{surah.name}</h3>
+                  <span className="text-[10px] font-cairo px-1.5 py-0.5 bg-[#D4AF37]/10 text-[#8B7355] rounded border border-[#D4AF37]/20 group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30">
+                    {surah.revelationType === 'Meccan' ? 'مكية' : 'مدنية'}
+                  </span>
+                </div>
                 <p className="text-xs font-cairo opacity-70 group-hover:text-white">{surah.englishName}</p>
               </div>
             </div>

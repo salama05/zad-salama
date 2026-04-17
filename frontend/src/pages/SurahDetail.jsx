@@ -1,14 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useAppContext } from '../context/AppContext';
 import * as Icons from 'react-icons/fa';
 import CachedQuranPage from '../components/CachedQuranPage';
 import { getCacheStats } from '../hooks/useQuranImageCache';
+import { useBackNavigation } from '../hooks/useBackNavigation';
 
 function SurahDetail() {
   const { surahId } = useParams();
   const navigate = useNavigate();
+  
+  // Handle HW back button to return to the list
+  useBackNavigation('/quran');
+
   const [surahName, setSurahName] = useState('');
   const [pages, setPages] = useState([]);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -57,12 +61,10 @@ function SurahDetail() {
 
     if (Math.abs(diff) > threshold) {
       if (diff > 0) {
-        // سحب لليسار (الانتقال للصفحة السابقة في المصحف)
-        goToPrevPage();
-      } else {
-        // سحب لليمين (الانتقال للصفحة التالية في المصحف)
-        goToNextPage();
-      }
+          goToPrevPage();
+        } else {
+          goToNextPage();
+        }
     }
   };
 

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+﻿import React, { useState, useEffect, useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { adhkarCategories } from '../data/adhkar';
 import * as Icons from 'react-icons/fa';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import { useBackNavigation } from '../hooks/useBackNavigation';
+import WeeklyAchievementCircles from '../components/WeeklyAchievementCircles';
 
 // Helper function to format date as YYYY-MM-DD
 const formatDate = (date) => {
@@ -18,11 +18,23 @@ const formatDate = (date) => {
   return [year, month, day].join('-');
 };
 
+const CORE_ADHKAR_CATEGORY_IDS = ['morning', 'evening', 'wake_up', 'sleep'];
+
 function Adhkar() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [counts, setCounts] = useState({});
   const [history, setHistory] = useState({});
   const [partialHistory, setPartialHistory] = useState([]);
+  const navigate = useNavigate();
+
+  // Handle hardware back button
+  useBackNavigation(() => {
+    if (selectedCategory) {
+      setSelectedCategory(null);
+    } else {
+      navigate('/home');
+    }
+  });
 
   useEffect(() => {
     // Load tracking history from local storage
@@ -127,24 +139,33 @@ function Adhkar() {
     }
   };
 
-  // Function to highlight days in calendar
-  const tileClassName = ({ date, view }) => {
-    if (view === 'month') {
-      const formattedDate = formatDate(date);
-      const dayHistory = history[formattedDate];
-      
-      const requiredCategories = ['morning', 'evening', 'wake_up', 'sleep'];
-      const isAllRequiredCompleted = dayHistory && requiredCategories.every(cat => dayHistory.includes(cat));
+  // Generate weekly progress for the last 7 days from core adhkar categories only
+  const weeklyProgressData = useMemo(() => {
+    const data = [];
+    const today = new Date();
+    const totalCoreCategories = CORE_ADHKAR_CATEGORY_IDS.length;
+    
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const dateStr = formatDate(d);
 
-      if (isAllRequiredCompleted) {
-        return 'bg-green-500 text-white rounded-full font-bold'; // Required categories completed
-      }
-      if ((dayHistory && dayHistory.length > 0) || partialHistory.includes(formattedDate)) {
-        return 'bg-yellow-300 text-yellow-900 rounded-full font-bold'; // Partially completed
-      }
+      const dayHistory = Array.isArray(history[dateStr]) ? history[dateStr] : [];
+      const completedCoreCategoriesCount = CORE_ADHKAR_CATEGORY_IDS.filter((id) => dayHistory.includes(id)).length;
+      const percentage = Math.round((completedCoreCategoriesCount / totalCoreCategories) * 100);
+
+      const dayName = d.toLocaleDateString('ar-SA', { weekday: 'short' }).replace('،', '').trim();
+      data.push({
+        id: dateStr,
+        date: dateStr,
+        name: dayName,
+        percentage,
+        completedCategoriesCount: completedCoreCategoriesCount,
+      });
     }
-    return null;
-  };
+
+    return data;
+  }, [history]);
 
   // View Category List
   if (!selectedCategory) {
@@ -174,27 +195,9 @@ function Adhkar() {
           })}
         </div>
 
-        {/* Progress Calendar Section */}
+        {/* Progress Chart Section */}
         <div className="w-full max-w-2xl mx-auto px-4 mb-20">
-          <div className="bg-white bg-opacity-70 p-6 rounded-2xl shadow-sm border border-zad-border/30">
-            <h3 className="text-2xl font-amiri font-bold text-center text-zad-text mb-6">سجل قراءة الأذكار</h3>
-            <div className="calendar-container w-full overflow-hidden flex justify-center">
-              <Calendar
-                tileClassName={tileClassName}
-                className="rtl custom-calendar"
-              />
-            </div>
-            <div className="flex justify-center mt-4 space-x-4 space-x-reverse font-cairo text-sm">
-              <div className="flex items-center">
-                <span className="w-3 h-3 rounded-full bg-green-500 mr-2 ml-1"></span>
-                <span className="opacity-80">أكملت جميع الأذكار</span>
-              </div>
-              <div className="flex items-center">
-                <span className="w-3 h-3 rounded-full bg-yellow-300 mr-2 ml-1"></span>
-                <span className="opacity-80">قرأت بعضها</span>
-              </div>
-            </div>
-          </div>
+          <WeeklyAchievementCircles daysProgress={weeklyProgressData} totalCategories={CORE_ADHKAR_CATEGORY_IDS.length} />
         </div>
       </div>
     );

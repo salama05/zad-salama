@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as Icons from 'react-icons/fa'; // More robust way to import
-import { useAppContext } from '../context/AppContext';
+import { useTheme } from '../context/ThemeContext';
 
 function Home() {
   const [userName, setUserName] = useState('');
-  const { theme, setTheme } = useAppContext();
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     const storedName = localStorage.getItem('zadUserName');

@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
-import { useAppContext } from './context/AppContext';
+import { useTheme } from './context/ThemeContext';
 import { App as CapacitorApp } from '@capacitor/app';
 
 // Pages
@@ -14,10 +14,11 @@ import Recitations from './pages/Recitations';
 import Videos from './pages/Videos';
 import MushafIndex from './pages/MushafIndex';
 import MushafReader from './pages/MushafReader';
-import AdhanPlayer from './components/AdhanPlayer';
+import { useAdhanScheduler } from './hooks/useAdhanScheduler';
 
 function App() {
-  const { theme } = useAppContext();
+  const { theme } = useTheme();
+  useAdhanScheduler(); // Background scheduler hook instead of rendering a component
   const location = useLocation();
   const navigate = useNavigate();
   const locationRef = useRef(location.pathname);
@@ -31,6 +32,7 @@ function App() {
   // Handle hardware back button
   useEffect(() => {
     const timePeriodToExit = 2000;
+    let listenerHandle = null;
     
     const showToast = (message) => {
       const existingToast = document.getElementById('custom-toast');
@@ -67,6 +69,17 @@ function App() {
     CapacitorApp.addListener('backButton', ({ canGoBack }) => {
       const currentPath = locationRef.current;
       
+      // Skip global handling only for pages that already register their own back handler
+      const hasCustomBackHandler = [
+        /^\/quran(\/|$)/,
+        /^\/mushaf-reader(\/|$)/,
+        /^\/adhkar(\/|$)/,
+      ].some((pattern) => pattern.test(currentPath));
+
+      if (hasCustomBackHandler) {
+        return;
+      }
+
       if (currentPath === '/home' || currentPath === '/onboarding' || currentPath === '/') {
         const currentTime = new Date().getTime();
         
@@ -84,10 +97,14 @@ function App() {
           navigate('/home', { replace: true });
         }
       }
+    }).then((handle) => {
+      listenerHandle = handle;
     });
 
     return () => {
-      CapacitorApp.removeAllListeners('backButton');
+      if (listenerHandle) {
+        listenerHandle.remove();
+      }
     };
   }, [navigate]);
 
@@ -104,7 +121,6 @@ function App() {
 
   return (
     <div className={`min-h-screen w-full font-cairo transition-colors duration-300 ${getThemeClasses()}`}>
-      <AdhanPlayer />
       {/* Decorative top border can be injected here for global layout, or in individual pages */}
       
       <main className="max-w-4xl mx-auto px-4 py-8 h-full">

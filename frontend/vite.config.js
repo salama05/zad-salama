@@ -1,7 +1,8 @@
-import { defineConfig } from 'vite'
+﻿import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -13,7 +14,7 @@ export default defineConfig({
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg', 'audio/*.mp3', 'audio/*.m4a', 'mushaf/*.png', 'mushaf/*.webp', 'mushaf/*.jpg'],
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,mp3,m4a,webp,jpg}'],
-        maximumFileSizeToCacheInBytes: 50 * 1024 * 1024, // 50MB limit to allow mushaf images
+        maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: /\/mushaf\/.+\.(png|webp|jpg)$/i,
@@ -21,8 +22,8 @@ export default defineConfig({
             options: {
               cacheName: 'mushaf-pages-cache',
               expiration: {
-                maxEntries: 700, // Full Mushaf pages + extras
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 Year
+                maxEntries: 700,
+                maxAgeSeconds: 60 * 60 * 24 * 365
               },
               cacheableResponse: {
                 statuses: [0, 200]
@@ -35,8 +36,8 @@ export default defineConfig({
             options: {
               cacheName: 'quran-images-cache',
               expiration: {
-                maxEntries: 604, // Full Mushaf pages
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 Year
+                maxEntries: 604,
+                maxAgeSeconds: 60 * 60 * 24 * 365
               },
               cacheableResponse: {
                 statuses: [0, 200]
@@ -44,33 +45,19 @@ export default defineConfig({
             }
           },
           {
-            urlPattern: /^https:\/\/mp3quran\.net\/api\/.*/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'quran-api-cache',
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 1 Month
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            urlPattern: /^https:\/\/mp3quran\.net\/(api|.*\.mp3)/i,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'google-fonts-cache',
+              cacheName: 'quran-audio-cache',
               expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
+                maxEntries: 200,
+                maxAgeSeconds: 60 * 60 * 24 * 365 // سنة كاملة
               },
               cacheableResponse: {
                 statuses: [0, 200]
               }
             }
-          }
+          },
         ]
       },
       manifest: {
@@ -95,16 +82,20 @@ export default defineConfig({
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
-            type: 'image/png'
-          },
-          {
-            src: 'maskable-icon-512x512.png',
-            sizes: '512x512',
             type: 'image/png',
-            purpose: 'maskable'
+            purpose: 'any maskable'
           }
         ]
       }
     })
   ],
+  resolve: {
+    alias: {
+      'react': path.resolve('./node_modules/react'),
+      'react-dom': path.resolve('./node_modules/react-dom'),
+    }
+  },
+  optimizeDeps: {
+    include: ['recharts']
+  }
 })
